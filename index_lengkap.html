@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UjianKu</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#eef2ff,#f8fafc);color:#172033}
+button,input{font:inherit}.hidden{display:none!important}.container{width:min(1100px,94%);margin:auto}
+.login{min-height:100vh;display:flex;justify-content:center;align-items:center}
+.login-box{width:420px;max-width:94%;background:#fff;padding:35px;border-radius:24px;box-shadow:0 15px 50px #0002}
+.logo{text-align:center;font-size:34px;font-weight:800;color:#4f46e5;margin-bottom:8px}
+.subtitle{text-align:center;color:#64748b;margin-bottom:30px}
+.input{width:100%;padding:14px;border:1px solid #dbe1ea;border-radius:12px;margin:8px 0 18px;outline:none}
+.input:focus{border-color:#6366f1}
+.btn{width:100%;border:0;padding:14px;border-radius:12px;background:#4f46e5;color:#fff;font-weight:bold;cursor:pointer}
+header{background:#fff;box-shadow:0 2px 15px #0001;padding:18px 0;position:sticky;top:0;z-index:10}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.brand{font-size:24px;font-weight:800;color:#4f46e5}.user{color:#475569}
+.dashboard{padding:35px 0}.hero{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;padding:30px;border-radius:24px;margin-bottom:30px}
+.hero h1{margin-bottom:8px}.subject-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.subject{background:#fff;border:0;padding:25px;border-radius:20px;text-align:left;cursor:pointer;box-shadow:0 8px 25px #0001;transition:.2s}
+.subject:hover{transform:translateY(-4px);box-shadow:0 14px 30px #0002}.icon{font-size:35px;margin-bottom:15px}.subject h3{margin-bottom:7px}.subject p{color:#64748b}
+.exam{padding:30px 0}.exam-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:15px}
+.timer{background:#fee2e2;color:#dc2626;padding:12px 18px;border-radius:12px;font-weight:bold}
+.progress{height:9px;background:#e2e8f0;border-radius:20px;overflow:hidden;margin-bottom:25px}
+.progress-bar{height:100%;width:0;background:#4f46e5;transition:.3s}
+.question-box{background:#fff;border-radius:22px;padding:30px;box-shadow:0 10px 30px #0001}
+.question-number{color:#4f46e5;font-weight:bold;margin-bottom:15px}.question{font-size:21px;font-weight:bold;line-height:1.5;margin-bottom:25px}
+.options{display:grid;gap:12px}.option{padding:16px;border:2px solid #e2e8f0;border-radius:14px;cursor:pointer;transition:.2s}
+.option:hover{border-color:#818cf8;background:#f5f3ff}.option.selected{border-color:#4f46e5;background:#eef2ff}
+.nav-buttons{display:flex;justify-content:space-between;gap:15px;margin-top:25px}
+.nav-buttons button{border:0;padding:13px 22px;border-radius:12px;cursor:pointer;font-weight:bold}
+.prev{background:#e2e8f0}.next{background:#4f46e5;color:#fff}.finish{background:#16a34a;color:#fff}
+.numbers{display:grid;grid-template-columns:repeat(auto-fill,minmax(45px,1fr));gap:8px;margin-top:25px}
+.num{border:0;padding:10px;border-radius:9px;background:#e2e8f0;cursor:pointer}.num.answered{background:#22c55e;color:#fff}.num.current{outline:3px solid #6366f1}
+.result{min-height:100vh;display:flex;justify-content:center;align-items:center}.result-box{background:#fff;width:500px;max-width:94%;padding:40px;border-radius:25px;text-align:center;box-shadow:0 15px 50px #0002}
+.score{font-size:65px;font-weight:800;color:#4f46e5;margin:20px}.info{color:#64748b;line-height:1.8}
+@media(max-width:600px){.login-box{padding:25px}.question-box{padding:20px}.question{font-size:18px}}
+</style>
+</head>
+<body>
+<section id="loginPage" class="login">
+<div class="login-box">
+<div class="logo">📚 UjianKu</div><div class="subtitle">Sistem Ujian Daring</div>
+<label>Nama Peserta</label><input id="nameInput" class="input" placeholder="Masukkan nama">
+<label>Password / PIN</label><input id="passwordInput" class="input" type="password" placeholder="Masukkan password">
+<button class="btn" onclick="login()">Masuk ke Ujian</button>
+</div></section>
+
+<section id="dashboardPage" class="hidden">
+<header><div class="container nav"><div class="brand">📚 UjianKu</div><div class="user">👤 <span id="userName"></span></div></div></header>
+<main class="container dashboard">
+<div class="hero"><h1>Halo, <span id="welcomeName"></span> 👋</h1><p>Silakan pilih mata pelajaran untuk memulai ujian.</p></div>
+<div class="subject-grid">
+<button class="subject" onclick="startExam('Matematika')"><div class="icon">📐</div><h3>Matematika</h3><p>50 soal • 60 menit</p></button>
+<button class="subject" onclick="startExam('IPA')"><div class="icon">🔬</div><h3>IPA</h3><p>50 soal • 60 menit</p></button>
+<button class="subject" onclick="startExam('IPS')"><div class="icon">🌎</div><h3>IPS</h3><p>50 soal • 60 menit</p></button>
+<button class="subject" onclick="startExam('Bahasa Indonesia')"><div class="icon">📖</div><h3>Bahasa Indonesia</h3><p>50 soal • 60 menit</p></button>
+<button class="subject" onclick="startExam('Bahasa Inggris')"><div class="icon">🇬🇧</div><h3>Bahasa Inggris</h3><p>50 soal • 60 menit</p></button>
+<button class="subject" onclick="startExam('PPKn')"><div class="icon">🇮🇩</div><h3>PPKn</h3><p>50 soal • 60 menit</p></button>
+<button class="subject" onclick="startExam('Informatika')"><div class="icon">💻</div><h3>Informatika</h3><p>50 soal • 60 menit</p></button>
+<button class="subject" onclick="startExam('Agama')"><div class="icon">📿</div><h3>Pendidikan Agama</h3><p>50 soal • 60 menit</p></button>
+</div></main></section>
+
+<section id="examPage" class="hidden">
+<header><div class="container nav"><div><div class="brand">UjianKu</div><small id="examSubject"></small></div><div class="timer">⏱ <span id="timer">60:00</span></div></div></header>
+<main class="container exam">
+<div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+<div class="question-box">
+<div class="question-number" id="questionNumber"></div><div class="question" id="questionText"></div><div class="options" id="options"></div>
+<div class="nav-buttons"><button class="prev" onclick="previousQuestion()">← Sebelumnya</button><button class="next" id="nextBtn" onclick="nextQuestion()">Berikutnya →</button></div>
+</div><div class="numbers" id="numbers"></div>
+</main></section>
+
+<section id="resultPage" class="result hidden">
+<div class="result-box"><h1>🎉 Ujian Selesai!</h1><div class="score"><span id="score">0</span></div>
+<div class="info"><div>Peserta: <b id="resultName"></b></div><div>Mata Pelajaran: <b id="resultSubject"></b></div><div>Jawaban benar: <b id="correctCount"></b> / <b id="totalCount"></b></div></div><br>
+<button class="btn" onclick="backToDashboard()">Kembali ke Dashboard</button></div>
+</section>
+
+<script>
+
+function makeQuestions(data){
+  return data.map(x=>({question:x[0],options:x[1],answer:x[2]}));
+}
+function makeIPA(){
+  const d=[
+["Unit terkecil penyusun makhluk hidup adalah ...",["Jaringan","Sel","Organ","Sistem organ"],1],
+["Organ yang berfungsi memompa darah adalah ...",["Paru-paru","Ginjal","Jantung","Hati"],2],
+["Proses tumbuhan membuat makanan sendiri disebut ...",["Respirasi","Fotosintesis","Transpirasi","Ekskresi"],1],
+["Gas yang diperlukan tumbuhan untuk fotosintesis adalah ...",["Oksigen","Nitrogen","Karbon dioksida","Hidrogen"],2],
+["Planet yang paling dekat dengan Matahari adalah ...",["Venus","Merkurius","Mars","Bumi"],1],
+["Satuan SI untuk panjang adalah ...",["Liter","Kilogram","Meter","Sekon"],2],
+["Perubahan wujud dari cair menjadi gas disebut ...",["Membeku","Mencair","Menguap","Mengembun"],2],
+["Alat untuk mengukur suhu adalah ...",["Barometer","Termometer","Higrometer","Amperemeter"],1],
+["Gaya yang menyebabkan benda jatuh ke bawah adalah ...",["Gaya magnet","Gaya gravitasi","Gaya gesek","Gaya listrik"],1],
+["Sumber energi utama bagi kehidupan di Bumi adalah ...",["Bulan","Matahari","Angin","Batu bara"],1],
+["Bagian tumbuhan yang menyerap air dan mineral dari tanah adalah ...",["Daun","Bunga","Akar","Buah"],2],
+["Hewan yang memakan tumbuhan disebut ...",["Karnivora","Herbivora","Omnivora","Insektivora"],1],
+["Darah yang kaya oksigen dipompa dari jantung menuju seluruh tubuh melalui ...",["Vena","Arteri","Kapiler","Ureter"],1],
+["Organ pernapasan utama manusia adalah ...",["Jantung","Paru-paru","Lambung","Usus"],1],
+["Pencernaan makanan secara mekanik pertama kali terjadi di ...",["Mulut","Lambung","Usus halus","Usus besar"],0],
+["Vitamin yang banyak membantu menjaga kesehatan mata adalah ...",["Vitamin A","Vitamin B","Vitamin C","Vitamin K"],0],
+["Tulang yang melindungi otak adalah ...",["Tulang rusuk","Tengkorak","Tulang paha","Tulang belakang"],1],
+["Peredaran darah dari jantung ke paru-paru lalu kembali ke jantung disebut ...",["Peredaran besar","Peredaran kecil","Peredaran terbuka","Peredaran ganda"],1],
+["Hewan yang berkembang biak dengan bertelur disebut ...",["Vivipar","Ovipar","Ovovivipar","Mamalia"],1],
+["Contoh hewan mamalia adalah ...",["Ayam","Ikan","Kucing","Katak"],2],
+["Air mendidih pada tekanan normal pada suhu ...",["0°C","50°C","100°C","150°C"],2],
+["Benda yang dapat ditarik kuat oleh magnet contohnya ...",["Kayu","Plastik","Besi","Kaca"],2],
+["Rangkaian listrik yang memiliki satu jalur arus disebut rangkaian ...",["Paralel","Seri","Campuran","Terbuka"],1],
+["Satuan kuat arus listrik adalah ...",["Volt","Ohm","Ampere","Watt"],2],
+["Energi yang dimiliki benda karena gerak disebut energi ...",["Potensial","Kinetik","Kimia","Nuklir"],1],
+["Bunyi dapat merambat melalui ...",["Ruang hampa saja","Medium","Cahaya saja","Magnet saja"],1],
+["Cermin yang biasa digunakan pada spion kendaraan adalah cermin ...",["Datar","Cekung","Cembung","Silinder"],2],
+["Pelangi terjadi karena cahaya mengalami ...",["Pembakaran","Dispersi","Pembekuan","Konduksi"],1],
+["Perpindahan panas melalui zat tanpa disertai perpindahan partikel secara keseluruhan disebut ...",["Konduksi","Konveksi","Radiasi","Evaporasi"],0],
+["Contoh perpindahan panas secara radiasi adalah ...",["Air mendidih berputar","Panas Matahari sampai ke Bumi","Sendok panas dalam teh","Angin laut"],1],
+["Lapisan atmosfer tempat terjadinya sebagian besar cuaca adalah ...",["Troposfer","Stratosfer","Mesosfer","Termosfer"],0],
+["Batuan yang terbentuk dari pembekuan magma disebut batuan ...",["Sedimen","Metamorf","Beku","Organik"],2],
+["Proses pengikisan tanah oleh air atau angin disebut ...",["Erosi","Evolusi","Fotosintesis","Kondensasi"],0],
+["Air yang berubah menjadi uap karena panas mengalami ...",["Kondensasi","Evaporasi","Sublimasi","Deposisi"],1],
+["Hubungan dua makhluk hidup yang sama-sama memperoleh keuntungan disebut ...",["Parasitisme","Komensalisme","Mutualisme","Predasi"],2],
+["Organisme yang membuat makanan sendiri disebut ...",["Konsumen","Produsen","Dekomposer","Predator"],1],
+["Jamur dan bakteri dalam ekosistem umumnya berperan sebagai ...",["Produsen","Konsumen tingkat I","Pengurai","Predator"],2],
+["Rantai makanan selalu diawali oleh ...",["Konsumen","Produsen","Pengurai","Predator"],1],
+["Gerhana Matahari terjadi ketika ...",["Bumi di antara Matahari dan Bulan","Bulan di antara Matahari dan Bumi","Matahari di antara Bumi dan Bulan","Bulan menjauhi Bumi"],1],
+["Gerhana Bulan terjadi ketika ...",["Bumi berada di antara Matahari dan Bulan","Bulan berada di antara Matahari dan Bumi","Matahari berada di antara Bumi dan Bulan","Bumi menjauhi Matahari"],0],
+["Sistem peredaran darah manusia disebut tertutup karena darah ...",["Bebas di rongga tubuh","Mengalir dalam pembuluh","Tidak memiliki plasma","Tidak memiliki sel"],1],
+["Zat makanan pembangun dan perbaikan jaringan tubuh adalah ...",["Protein","Karbohidrat","Air","Mineral saja"],0],
+["Karbohidrat merupakan sumber utama ...",["Energi","Antibodi","Pigmen","Hormon"],0],
+["Bagian bunga yang berfungsi sebagai alat kelamin jantan adalah ...",["Putik","Benang sari","Mahkota","Kelopak"],1],
+["Bagian bunga yang berfungsi sebagai alat kelamin betina adalah ...",["Putik","Benang sari","Mahkota","Kelopak"],0],
+["Adaptasi adalah ...",["Perubahan cuaca","Penyesuaian makhluk hidup terhadap lingkungan","Perpindahan planet","Pertumbuhan batu"],1],
+["Salah satu contoh energi terbarukan adalah ...",["Minyak bumi","Batu bara","Energi surya","Gas alam"],2],
+["Panel surya mengubah energi cahaya menjadi energi ...",["Listrik","Bunyi","Gerak","Kimia"],0],
+["Alat untuk mengukur tekanan udara adalah ...",["Barometer","Termometer","Neraca","Voltmeter"],0],
+["Hukum kekekalan energi menyatakan bahwa energi ...",["Dapat diciptakan dari nol","Dapat dimusnahkan seluruhnya","Tidak dapat diciptakan atau dimusnahkan, hanya berubah bentuk","Selalu berkurang"],2]
+  ]; return makeQuestions(d);
+}
+function makeIPS(){
+  const d=[
+["Ilmu yang mempelajari permukaan dan proses Bumi disebut ...",["Geografi","Biologi","Kimia","Sosiologi"],0],
+["Kegiatan menghasilkan barang atau jasa disebut ...",["Konsumsi","Produksi","Distribusi","Impor"],1],
+["Kegiatan menyalurkan barang dari produsen kepada konsumen disebut ...",["Produksi","Distribusi","Konsumsi","Investasi"],1],
+["Orang yang menggunakan barang atau jasa disebut ...",["Produsen","Distributor","Konsumen","Eksportir"],2],
+["Kegiatan menjual barang ke luar negeri disebut ...",["Impor","Ekspor","Konsumsi","Produksi"],1],
+["Kegiatan membeli barang dari luar negeri disebut ...",["Ekspor","Impor","Distribusi","Produksi"],1],
+["Peta yang menunjukkan kenampakan wilayah secara umum disebut peta ...",["Umum","Khusus","Cuaca","Kontur"],0],
+["Garis khayal yang membagi Bumi menjadi belahan utara dan selatan adalah ...",["Garis bujur","Khatulistiwa","Garis balik","Meridian utama"],1],
+["Indonesia terletak di antara dua benua, yaitu ...",["Asia dan Australia","Eropa dan Afrika","Asia dan Eropa","Australia dan Afrika"],0],
+["Indonesia terletak di antara Samudra ...",["Atlantik dan Arktik","Hindia dan Pasifik","Pasifik dan Atlantik","Hindia dan Arktik"],1],
+["Interaksi sosial terjadi apabila terdapat ...",["Kontak sosial dan komunikasi","Persaingan saja","Konflik saja","Perbedaan bahasa"],0],
+["Kerja sama termasuk proses sosial yang bersifat ...",["Asosiatif","Disosiatif","Negatif","Individual"],0],
+["Persaingan dalam interaksi sosial disebut ...",["Akomodasi","Kompetisi","Asimilasi","Integrasi"],1],
+["Ilmu yang mempelajari masyarakat disebut ...",["Sosiologi","Geologi","Ekonomi","Astronomi"],0],
+["Norma yang bersumber dari ajaran agama disebut norma ...",["Kesopanan","Agama","Kesusilaan","Hukum"],1],
+["Aturan resmi yang dibuat lembaga berwenang disebut norma ...",["Agama","Kesopanan","Hukum","Kebiasaan"],2],
+["Contoh kebutuhan primer adalah ...",["Makanan","Perhiasan","Mobil mewah","Liburan"],0],
+["Alat pembayaran yang sah di Indonesia adalah ...",["Rupiah","Dolar","Yen","Euro"],0],
+["Lembaga yang mengatur kebijakan moneter di Indonesia adalah ...",["Bank Indonesia","BPS","DPR","KPK"],0],
+["Pasar adalah tempat bertemunya ...",["Produsen dan konsumen","Guru dan siswa","Dokter dan pasien","Petani dan nelayan saja"],0],
+["Kerajaan Hindu tertua yang terkenal di Indonesia adalah ...",["Kutai","Majapahit","Demak","Mataram Islam"],0],
+["Candi Borobudur merupakan peninggalan kerajaan bercorak ...",["Islam","Buddha","Kristen","Konghucu"],1],
+["Kerajaan Majapahit mencapai kejayaan pada masa pemerintahan ...",["Hayam Wuruk","Sultan Agung","Sultan Hasanuddin","Raden Patah"],0],
+["Sumpah Pemuda terjadi pada tahun ...",["1908","1928","1945","1949"],1],
+["Proklamasi Kemerdekaan Indonesia dibacakan pada ...",["17 Agustus 1945","28 Oktober 1928","1 Juni 1945","10 November 1945"],0],
+["Tokoh yang membacakan Proklamasi Kemerdekaan bersama Mohammad Hatta adalah ...",["Soekarno","Ki Hajar Dewantara","Sutan Sjahrir","Ahmad Dahlan"],0],
+["Organisasi Budi Utomo berdiri pada tahun ...",["1908","1928","1945","1950"],0],
+["Hari Pahlawan diperingati setiap ...",["10 November","17 Agustus","28 Oktober","20 Mei"],0],
+["ASEAN didirikan pada tahun ...",["1945","1967","1975","1998"],1],
+["Sekretariat ASEAN berada di ...",["Jakarta","Bangkok","Manila","Kuala Lumpur"],0],
+["Jumlah negara pendiri ASEAN adalah ...",["3","5","7","10"],1],
+["Bentuk muka Bumi yang tinggi dan memiliki lereng disebut ...",["Gunung","Lembah","Delta","Dataran rendah"],0],
+["Dataran yang berada pada ketinggian rendah dan relatif datar disebut ...",["Dataran tinggi","Dataran rendah","Pegunungan","Lembah"],1],
+["Hujan yang terjadi karena udara naik melewati pegunungan disebut hujan ...",["Orografis","Zenital","Frontal","Buatan"],0],
+["Gempa akibat pergeseran lempeng Bumi disebut gempa ...",["Tektonik","Vulkanik","Runtuhan","Buatan"],0],
+["Gunung meletus dapat menghasilkan material berupa ...",["Abu vulkanik","Garam laut saja","Es batu","Kapur tulis"],0],
+["Migrasi adalah ...",["Perpindahan penduduk","Pertumbuhan ekonomi","Perubahan musim","Perdagangan"],0],
+["Urbanisasi adalah perpindahan penduduk dari ...",["Kota ke desa","Desa ke kota","Negara ke negara","Pulau ke laut"],1],
+["Sensus penduduk bertujuan untuk mengetahui ...",["Data kependudukan","Harga barang","Curah hujan saja","Jumlah kendaraan saja"],0],
+["Kegiatan ekonomi yang memanfaatkan sumber daya alam disebut ...",["Ekstraktif","Jasa murni","Konsumtif","Digital"],0],
+["Contoh kegiatan ekonomi di bidang jasa adalah ...",["Mengajar","Menambang batu bara","Menanam padi","Menangkap ikan"],0],
+["Pajak merupakan salah satu sumber ...",["Pendapatan negara","Bahan bakar","Mata uang asing","Bahan tambang"],0],
+["Inflasi adalah keadaan ketika ...",["Harga-harga umum cenderung naik","Harga selalu turun","Produksi berhenti total","Uang tidak digunakan"],0],
+["Koperasi berasaskan ...",["Kekeluargaan","Persaingan bebas","Monopoli","Individualisme"],0],
+["Simbol garis pada peta biasanya digunakan untuk menunjukkan ...",["Jalan atau sungai","Gunung saja","Kota saja","Laut saja"],0],
+["Skala peta menunjukkan perbandingan antara ...",["Jarak pada peta dan jarak sebenarnya","Jumlah penduduk dan luas","Suhu dan waktu","Tinggi dan berat"],0],
+["Benua terbesar di dunia adalah ...",["Afrika","Asia","Eropa","Australia"],1],
+["Samudra terluas di dunia adalah ...",["Hindia","Pasifik","Atlantik","Arktik"],1],
+["Kegiatan membeli barang untuk memenuhi kebutuhan disebut ...",["Konsumsi","Produksi","Distribusi","Ekspor"],0]
+  ]; return makeQuestions(d);
+}
+function makeBI(){
+  const d=[
+["Gagasan utama dalam sebuah paragraf disebut ...",["Kalimat penjelas","Ide pokok","Kata sambung","Judul"],1],
+["Kalimat yang berisi inti pembahasan paragraf disebut ...",["Kalimat utama","Kalimat tanya","Kalimat seru","Kalimat perintah"],0],
+["Kata yang memiliki makna berlawanan disebut ...",["Sinonim","Antonim","Homonim","Hiponim"],1],
+["Kata yang memiliki makna sama atau mirip disebut ...",["Antonim","Sinonim","Akronim","Konjungsi"],1],
+["Teks yang menceritakan rangkaian peristiwa disebut teks ...",["Narasi","Deskripsi","Eksposisi","Prosedur"],0],
+["Teks yang menggambarkan suatu objek secara rinci disebut ...",["Narasi","Deskripsi","Argumentasi","Persuasi"],1],
+["Teks yang menjelaskan informasi atau pengetahuan secara objektif disebut ...",["Eksposisi","Narasi","Drama","Puisi"],0],
+["Teks yang bertujuan memengaruhi pembaca agar melakukan sesuatu disebut ...",["Persuasi","Deskripsi","Laporan","Narasi"],0],
+["Bagian awal teks narasi yang memperkenalkan tokoh dan latar disebut ...",["Orientasi","Komplikasi","Resolusi","Koda"],0],
+["Masalah atau konflik dalam cerita disebut ...",["Orientasi","Komplikasi","Judul","Amanat"],1],
+["Penyelesaian konflik dalam cerita disebut ...",["Resolusi","Orientasi","Komplikasi","Identitas"],0],
+["Pesan yang dapat diambil dari sebuah cerita disebut ...",["Amanat","Latar","Alur","Tokoh"],0],
+["Pelaku dalam cerita disebut ...",["Tokoh","Latar","Tema","Alur"],0],
+["Urutan peristiwa dalam cerita disebut ...",["Alur","Sudut pandang","Amanat","Diksi"],0],
+["Tempat, waktu, dan suasana dalam cerita disebut ...",["Latar","Tema","Tokoh","Konflik"],0],
+["Pemilihan kata dalam karya sastra disebut ...",["Diksi","Alur","Latar","Amanat"],0],
+["Majas yang membandingkan dua hal secara langsung dengan kata seperti atau bagaikan disebut ...",["Metafora","Simile","Ironi","Litotes"],1],
+["Majas yang memberikan sifat manusia kepada benda disebut ...",["Personifikasi","Hiperbola","Metonimia","Repetisi"],0],
+["Majas yang melebih-lebihkan sesuatu disebut ...",["Hiperbola","Simile","Litotes","Ironi"],0],
+["Kalimat yang digunakan untuk menanyakan sesuatu disebut kalimat ...",["Berita","Tanya","Perintah","Seru"],1],
+["Kalimat yang berisi perintah disebut kalimat ...",["Imperatif","Interogatif","Deklaratif","Deskriptif"],0],
+["Tanda baca untuk mengakhiri kalimat berita adalah ...",["Koma","Titik","Titik dua","Tanda tanya"],1],
+["Tanda baca yang digunakan pada akhir kalimat tanya adalah ...",["Titik","Koma","Tanda tanya","Titik koma"],2],
+["Kata 'karena' termasuk kata hubung yang menyatakan ...",["Sebab","Pertentangan","Pilihan","Tujuan"],0],
+["Kata 'tetapi' menyatakan hubungan ...",["Pertentangan","Sebab","Akibat","Penambahan"],0],
+["Kata 'dan' menyatakan hubungan ...",["Penambahan","Pertentangan","Sebab","Waktu"],0],
+["Ringkasan adalah bentuk teks yang ...",["Lebih panjang dari teks asli","Memuat inti informasi secara singkat","Tidak memiliki informasi","Hanya berisi judul"],1],
+["Membaca cepat untuk menemukan informasi tertentu disebut ...",["Skimming","Scanning","Menulis","Menyimak"],1],
+["Membaca untuk mendapatkan gambaran umum teks disebut ...",["Scanning","Skimming","Dikte","Ejaan"],1],
+["Surat yang digunakan untuk keperluan resmi disebut surat ...",["Pribadi","Dinas","Keluarga","Tidak resmi"],1],
+["Bagian surat resmi yang berisi tujuan surat disebut ...",["Alamat tujuan","Salam penutup","Lampiran","Tanda tangan"],0],
+["Daftar pertanyaan yang diajukan untuk memperoleh informasi disebut ...",["Wawancara","Pidato","Debat","Narasi"],0],
+["Orang yang memberikan informasi dalam wawancara disebut ...",["Pewawancara","Narasumber","Pembaca","Moderator"],1],
+["Teks yang berisi langkah-langkah melakukan sesuatu disebut teks ...",["Prosedur","Narasi","Deskripsi","Eksposisi"],0],
+["Kata kerja yang menunjukkan tindakan disebut ...",["Verba","Nomina","Adjektiva","Konjungsi"],0],
+["Kata yang menunjukkan sifat disebut ...",["Adjektiva","Nomina","Verba","Pronomina"],0],
+["Kata yang digunakan untuk menggantikan nama orang atau benda disebut ...",["Pronomina","Verba","Konjungsi","Adverbia"],0],
+["Judul yang baik seharusnya ...",["Tidak berkaitan dengan isi","Mencerminkan isi tulisan","Sangat panjang","Tidak jelas"],1],
+["Kalimat efektif harus ...",["Berbelit-belit","Jelas dan sesuai kaidah","Selalu panjang","Menggunakan banyak kata asing"],1],
+["Kata baku yang benar adalah ...",["Resiko","Risiko","Resikko","Riskho"],1],
+["Kata baku yang benar adalah ...",["Ijin","Izin","Idzin","Ijjin"],1],
+["Kata baku yang benar adalah ...",["Aktifitas","Aktivitas","Aktifvitas","Aktifitaz"],1],
+["Kata baku yang benar adalah ...",["Apotik","Apotek","Apotick","Apoteg"],1],
+["Kata baku yang benar adalah ...",["Praktek","Praktik","Prakteg","Praktiek"],1],
+["Karya sastra yang terikat oleh bait dan larik disebut ...",["Puisi","Novel","Cerpen","Drama"],0],
+["Cerita pendek biasa disingkat menjadi ...",["Cerpang","Cerpen","Cepen","Cerita pendekan"],1],
+["Karya sastra berbentuk prosa panjang dengan alur dan tokoh disebut ...",["Novel","Pantun","Syair","Pidato"],0],
+["Percakapan antartokoh dalam drama disebut ...",["Dialog","Narasi","Diksi","Amanat"],0],
+["Orang yang menyampaikan pidato disebut ...",["Orator","Narasumber","Editor","Responden"],0],
+["Tujuan utama membaca adalah ...",["Memperoleh informasi dan pemahaman","Menghafal semua kata","Membuat teks semakin panjang","Menghindari informasi"],0]
+  ]; return makeQuestions(d);
+}
+function makeBIng(){
+  const d=[
+["The opposite of 'big' is ...",["small","tall","long","wide"],0],
+["The past form of 'go' is ...",["goed","gone","went","going"],2],
+["She ... a student.",["am","is","are","be"],1],
+["They ... playing football.",["is","am","are","was"],2],
+["I ... breakfast every morning.",["eat","eats","ate","eating"],0],
+["He ... to school yesterday.",["go","goes","went","going"],2],
+["'Beautiful' means ... in Indonesian.",["cepat","indah","tinggi","murah"],1],
+["'Expensive' means ... in Indonesian.",["mahal","murah","mudah","lama"],0],
+["The plural form of 'child' is ...",["childs","children","childes","childrens"],1],
+["The plural form of 'book' is ...",["bookes","books","bookies","book"],1],
+["We use 'an' before a word beginning with a ... sound.",["consonant","vowel","number","verb"],1],
+["'Can' is used to express ...",["ability","past time","possession only","location"],0],
+["'I am reading a book' is in the ... tense.",["Simple Past","Present Continuous","Simple Future","Present Perfect"],1],
+["'She visited Bali last year' is in the ... tense.",["Simple Present","Simple Past","Present Continuous","Future"],1],
+["'They will study tomorrow' is in the ... tense.",["Simple Past","Simple Present","Simple Future","Past Perfect"],2],
+["The correct question for asking someone's name is ...",["How old name?","What is your name?","Where your name?","Who your?"] ,1],
+["'Where do you live?' asks about ...",["age","name","address/place","hobby"],2],
+["'How old are you?' asks about ...",["age","address","job","food"],0],
+["A person who teaches students is a ...",["doctor","teacher","farmer","driver"],1],
+["A place where students study is a ...",["hospital","market","school","station"],2],
+["The opposite of 'hot' is ...",["warm","cold","dry","bright"],1],
+["The opposite of 'early' is ...",["late","fast","soon","first"],0],
+["'Yesterday' refers to ...",["tomorrow","today","the day before today","next week"],2],
+["'Tomorrow' refers to ...",["the day before","the next day","last month","today"],1],
+["A recount text mainly tells about ...",["past events","future plans only","instructions","definitions"],0],
+["A narrative text usually contains ...",["characters and events","only statistics","only instructions","only definitions"],0],
+["The purpose of a procedure text is to ...",["tell how to do something","describe a person only","tell a fictional story","argue about politics"],0],
+["'First, next, then, finally' are commonly used in ...",["procedure texts","greetings","descriptions only","questions"],0],
+["'Because' is used to show ...",["reason","contrast","choice","place"],0],
+["'But' is used to show ...",["contrast","reason","time","addition"],0],
+["'And' is used to show ...",["addition","contrast","reason","condition"],0],
+["The comparative form of 'tall' is ...",["taller","tallest","more tall","tallly"],0],
+["The superlative form of 'good' is ...",["gooder","better","best","more good"],2],
+["The comparative form of 'beautiful' is ...",["beautifuller","more beautiful","most beautiful","beautifulest"],1],
+["A synonym of 'happy' is ...",["sad","glad","angry","tired"],1],
+["A synonym of 'quick' is ...",["slow","fast","weak","late"],1],
+["A polite expression to ask for help is ...",["Give me!","Could you help me, please?","You must help!","Help now!"],1],
+["A suitable response to 'Thank you' is ...",["You're welcome","Good night","I'm sorry","See you yesterday"],0],
+["A suitable response to 'Good morning' is ...",["Good morning","Goodbye yesterday","Thank you only","Sorry"],0],
+["'My father is a doctor.' The word 'doctor' is a ...",["verb","noun","adjective","conjunction"],1],
+["'She is kind.' The word 'kind' is an ...",["adjective","noun","verb","article"],0],
+["'Run' is commonly a ...",["verb","noun only","article","conjunction"],0],
+["The correct possessive form for 'the book of Rina' is ...",["Rina book","Rina's book","Rinas book","book Rina's"],1],
+["'There are three apples' means there is ...",["one apple","two apples","three apples","four apples"],2],
+["'Much' is commonly used with ... nouns.",["countable plural","uncountable","proper plural only","people names"],1],
+["'Many' is commonly used with ... nouns.",["uncountable","countable plural","abstract only","singular only"],1],
+["The correct sentence is ...",["He don't like tea.","He doesn't like tea.","He doesn't likes tea.","He not like tea."],1],
+["The correct sentence is ...",["I am go to school.","I goes school.","I go to school.","I going school."],2],
+["A text describing the characteristics of a person, place, or thing is a ...",["descriptive text","procedure text","recount text","announcement"],0]
+  ]; return makeQuestions(d);
+}
+function makePPKn(){
+  const d=[
+["Dasar negara Indonesia adalah ...",["UUD 1945","Pancasila","Bhinneka Tunggal Ika","Proklamasi"],1],
+["Lambang negara Indonesia adalah ...",["Garuda Pancasila","Burung Merpati","Harimau","Komodo"],0],
+["Semboyan Bhinneka Tunggal Ika berarti ...",["Bersatu kita teguh","Berbeda-beda tetapi tetap satu","Merdeka atau mati","Adil dan makmur"],1],
+["Sila pertama Pancasila berbunyi ...",["Kemanusiaan yang adil dan beradab","Ketuhanan Yang Maha Esa","Persatuan Indonesia","Keadilan sosial"],1],
+["Sila kedua Pancasila berkaitan dengan ...",["Kemanusiaan","Persatuan","Musyawarah","Keadilan ekonomi"],0],
+["Sila ketiga Pancasila berbunyi ...",["Persatuan Indonesia","Keadilan Sosial","Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan","Ketuhanan Yang Maha Esa"],0],
+["Sila keempat menekankan pentingnya ...",["Musyawarah","Persaingan","Kekuasaan","Kekayaan"],0],
+["Sila kelima berkaitan dengan ...",["Keadilan sosial","Kebebasan mutlak","Kekuatan militer","Perdagangan"],0],
+["Konstitusi negara Indonesia adalah ...",["UUD 1945","Pancasila","KUHP","Peraturan sekolah"],0],
+["Proklamasi Kemerdekaan Indonesia dibacakan pada ...",["17 Agustus 1945","20 Mei 1908","28 Oktober 1928","10 November 1945"],0],
+["UUD 1945 disahkan pada ...",["18 Agustus 1945","17 Agustus 1945","1 Juni 1945","28 Oktober 1928"],0],
+["Lembaga yang memiliki fungsi legislasi bersama Presiden adalah ...",["DPR","MA","BPK","KPU"],0],
+["Lembaga yang menguji undang-undang terhadap UUD 1945 adalah ...",["Mahkamah Konstitusi","DPR","BPK","KPK"],0],
+["Lembaga peradilan tertinggi dalam lingkungan peradilan adalah ...",["Mahkamah Agung","DPR","DPD","KPU"],0],
+["Pemilu dilaksanakan berdasarkan asas ...",["Luber Jurdil","Cepat dan mahal","Tertutup mutlak","Bebas tanpa aturan"],0],
+["Luber merupakan singkatan dari ...",["Langsung, umum, bebas, rahasia","Lurus, umum, bersih, rakyat","Langsung, unggul, bebas, resmi","Lokal, umum, bebas, rahasia"],0],
+["Jurdil berarti ...",["Jujur dan adil","Jelas dan disiplin","Jujur dan disiplin","Jabatan dan keadilan"],0],
+["Hak untuk memperoleh pendidikan termasuk ...",["Hak warga negara","Kewajiban pajak","Larangan","Sanksi"],0],
+["Contoh kewajiban warga negara adalah ...",["Menaati hukum","Mendapat pendidikan","Mendapat perlindungan","Mendapat pelayanan"],0],
+["Sikap menghargai perbedaan agama merupakan contoh ...",["Toleransi","Diskriminasi","Konflik","Egoisme"],0],
+["Gotong royong mencerminkan nilai ...",["Kerja sama","Persaingan","Individualisme","Permusuhan"],0],
+["Musyawarah bertujuan mencapai ...",["Mufakat","Kemenangan satu pihak","Konflik","Persaingan"],0],
+["Menghormati pendapat orang lain merupakan sikap ...",["Demokratis","Egois","Sombong","Diskriminatif"],0],
+["Aturan yang mengatur kehidupan bersama disebut ...",["Norma","Hadiah","Hobi","Tradisi pribadi"],0],
+["Contoh norma kesopanan adalah ...",["Mengucapkan salam dan menghormati orang lain","Membayar pajak","Mematuhi rambu lalu lintas","Beribadah"],0],
+["Contoh norma hukum adalah ...",["Mematuhi lampu lalu lintas","Berbicara sopan","Menghormati orang tua","Berdoa"],0],
+["Identitas nasional Indonesia salah satunya adalah ...",["Bahasa Indonesia","Bahasa asing saja","Mata uang asing","Bendera negara lain"],0],
+["Bahasa negara Indonesia adalah ...",["Bahasa Indonesia","Bahasa Inggris","Bahasa Belanda","Bahasa Jepang"],0],
+["Bendera negara Indonesia adalah ...",["Merah Putih","Merah Biru","Putih Hijau","Kuning Merah"],0],
+["Lagu kebangsaan Indonesia adalah ...",["Indonesia Raya","Bagimu Negeri","Garuda Pancasila","Hari Merdeka"],0],
+["Keutuhan NKRI perlu dijaga dengan sikap ...",["Persatuan","Permusuhan","Diskriminasi","Egoisme"],0],
+["NKRI merupakan singkatan dari ...",["Negara Kesatuan Republik Indonesia","Negara Kerajaan Republik Indonesia","Negara Kesatuan Rakyat Indonesia","Negara Kebangsaan Republik Indonesia"],0],
+["Contoh ancaman terhadap persatuan adalah ...",["Penyebaran kebencian dan diskriminasi","Gotong royong","Toleransi","Musyawarah"],0],
+["Sikap cinta tanah air disebut ...",["Nasionalisme","Individualisme","Materialisme","Egoisme"],0],
+["Membeli dan menggunakan produk dalam negeri dapat menjadi bentuk ...",["Cinta tanah air","Diskriminasi","Pelanggaran hukum","Konflik"],0],
+["Demokrasi berarti pemerintahan yang berasal dari ...",["Rakyat","Satu keluarga","Satu perusahaan","Tentara saja"],0],
+["Kedaulatan berada di tangan ...",["Rakyat","Pedagang","Sekolah","Perusahaan"],0],
+["Hak asasi manusia melekat pada manusia sejak ...",["Lahir","Masuk sekolah","Bekerja","Menikah"],0],
+["Contoh pelanggaran HAM adalah ...",["Merampas hak orang lain","Menghormati orang lain","Membantu korban bencana","Bermusyawarah"],0],
+["Persamaan kedudukan warga negara berarti ...",["Setiap warga memiliki kedudukan yang sama di depan hukum","Hanya pejabat yang dilindungi hukum","Orang kaya bebas dari hukum","Hukum hanya berlaku di sekolah"],0],
+["Sikap adil berarti ...",["Memberikan hak sesuai kewajiban dan aturan","Selalu memihak teman","Mengutamakan diri sendiri","Mengabaikan orang lain"],0],
+["Contoh penerapan sila pertama di sekolah adalah ...",["Menghormati teman yang beribadah","Memilih ketua kelas dengan musyawarah","Kerja bakti","Berbagi tugas secara adil"],0],
+["Contoh penerapan sila ketiga adalah ...",["Menjaga persatuan meskipun berbeda","Beribadah","Musyawarah","Berbagi bantuan"],0],
+["Contoh penerapan sila keempat adalah ...",["Bermusyawarah memilih ketua kelas","Menghormati ibadah","Kerja bakti","Membantu korban"],0],
+["Contoh penerapan sila kelima adalah ...",["Membagi tugas secara adil","Berdoa","Menghormati perbedaan","Musyawarah"],0],
+["Peraturan dibuat untuk menciptakan ...",["Ketertiban","Kekacauan","Perselisihan","Ketidakadilan"],0],
+["Tanggung jawab berarti ...",["Melaksanakan kewajiban dengan sungguh-sungguh","Menghindari semua tugas","Menyalahkan orang lain","Mengabaikan aturan"],0],
+["Sikap rela berkorban untuk kepentingan bersama mencerminkan ...",["Semangat kebangsaan","Egoisme","Apatisme","Individualisme"],0],
+["Menghargai budaya daerah lain merupakan bentuk ...",["Toleransi dan persatuan","Diskriminasi","Permusuhan","Penolakan"],0]
+  ]; return makeQuestions(d);
+}
+function makeInformatika(){
+  const d=[
+["CPU merupakan singkatan dari ...",["Central Processing Unit","Computer Personal Unit","Central Program Utility","Control Processing User"],0],
+["RAM berfungsi terutama sebagai ...",["Penyimpanan sementara saat program berjalan","Penyimpanan permanen","Alat mencetak","Sumber listrik"],0],
+["ROM adalah memori yang umumnya bersifat ...",["Tidak mudah berubah","Selalu kosong","Hanya untuk gambar","Tidak dapat dibaca"],0],
+["Perangkat untuk memasukkan data berupa ketikan adalah ...",["Keyboard","Monitor","Speaker","Printer"],0],
+["Perangkat untuk menampilkan gambar dari komputer adalah ...",["Monitor","Keyboard","Mouse","Scanner"],0],
+["Perangkat untuk mencetak dokumen adalah ...",["Printer","Router","RAM","CPU"],0],
+["Sistem operasi berfungsi untuk ...",["Mengelola perangkat keras dan perangkat lunak","Mengisi tinta printer","Membuat listrik","Mengganti kabel"],0],
+["Contoh sistem operasi desktop adalah ...",["Windows","HTML","JPEG","Wi-Fi"],0],
+["Android merupakan sistem operasi yang banyak digunakan pada ...",["Smartphone","Printer saja","Keyboard saja","Kamera analog"],0],
+["Internet adalah jaringan yang menghubungkan ...",["Banyak komputer/perangkat di seluruh dunia","Satu keyboard","Satu printer","Satu file"],0],
+["LAN merupakan jaringan dengan cakupan ...",["Lokal/terbatas","Seluruh dunia","Antarbenua saja","Satelit luar angkasa"],0],
+["WAN memiliki cakupan yang ...",["Lebih luas daripada LAN","Lebih kecil daripada keyboard","Hanya satu ruangan","Tidak menggunakan jaringan"],0],
+["Perangkat yang meneruskan paket data antarjaringan disebut ...",["Router","Monitor","Keyboard","Scanner"],0],
+["Perangkat yang menghubungkan perangkat dalam satu jaringan lokal disebut ...",["Switch","Speaker","Printer","Webcam"],0],
+["Wi-Fi merupakan teknologi jaringan ...",["Nirkabel","Kabel serat saja","Analog saja","Tanpa sinyal"],0],
+["Alamat unik perangkat pada jaringan disebut ...",["IP address","HTML","CPU","RAM"],0],
+["HTTP adalah protokol yang digunakan untuk ...",["Pertukaran data web","Mengisi baterai","Mencetak foto","Mengukur suhu"],0],
+["HTTPS menambahkan keamanan melalui ...",["Enkripsi komunikasi","Ukuran layar","Kapasitas RAM","Kecepatan kipas"],0],
+["URL digunakan untuk menunjukkan ...",["Alamat sumber daya di internet","Kapasitas baterai","Jenis CPU","Ukuran monitor"],0],
+["Browser digunakan untuk ...",["Mengakses halaman web","Mengedit kabel","Mengukur listrik","Mencetak uang"],0],
+["Contoh browser adalah ...",["Chrome","Android","Windows","Linux"],0],
+["Mesin pencari digunakan untuk ...",["Mencari informasi di internet","Mengganti RAM","Mengisi baterai","Membuat jaringan listrik"],0],
+["Algoritma adalah ...",["Langkah-langkah logis untuk menyelesaikan masalah","Nama perangkat keras","Jenis monitor","Kabel jaringan"],0],
+["Flowchart digunakan untuk ...",["Menggambarkan alur proses/algoritma","Menyimpan foto","Mencetak dokumen","Mengukur suhu"],0],
+["Simbol belah ketupat pada flowchart biasanya berarti ...",["Keputusan","Mulai/selesai","Proses","Input/output"],0],
+["HTML digunakan untuk ...",["Menyusun struktur halaman web","Mengolah listrik","Mengedit audio saja","Mengukur jaringan"],0],
+["CSS digunakan untuk ...",["Mengatur tampilan halaman web","Menyimpan BIOS","Mengganti CPU","Menghubungkan kabel"],0],
+["JavaScript pada web digunakan untuk ...",["Menambahkan perilaku/interaksi","Mencetak dokumen","Mengukur suhu","Mengganti layar"],0],
+["File dengan ekstensi .jpg biasanya berupa ...",["Gambar","Audio","Program","Dokumen teks"],0],
+["File dengan ekstensi .mp3 biasanya berupa ...",["Audio","Gambar","Video","Spreadsheet"],0],
+["File dengan ekstensi .mp4 biasanya berupa ...",["Video","Audio saja","Teks","Database"],0],
+["Database digunakan untuk ...",["Menyimpan dan mengelola data terstruktur","Menghasilkan listrik","Mendinginkan CPU","Menggambar kabel"],0],
+["SQL digunakan untuk ...",["Mengelola dan mengambil data pada database","Mengedit video","Membuat kabel","Mengukur suhu"],0],
+["Backup berarti ...",["Membuat salinan data untuk pemulihan","Menghapus semua data","Mematikan komputer","Mengubah monitor"],0],
+["Malware adalah ...",["Perangkat lunak berbahaya","Perangkat keras baru","Jenis kabel","Sistem operasi resmi"],0],
+["Virus komputer dapat ...",["Mengganggu atau merusak sistem/data","Meningkatkan kapasitas RAM secara ajaib","Membuat listrik","Memperbaiki semua file"],0],
+["Phishing adalah upaya ...",["Menipu pengguna untuk memperoleh informasi sensitif","Mempercepat internet secara resmi","Membersihkan layar","Membuat backup"],0],
+["Password yang baik sebaiknya ...",["Sulit ditebak dan tidak mudah dibagikan","Menggunakan nama sendiri saja","Sama untuk semua akun","Dibagikan kepada teman"],0],
+["Autentikasi dua faktor menambah ...",["Lapisan keamanan tambahan","Kapasitas penyimpanan","Ukuran layar","Kecepatan CPU"],0],
+["Enkripsi adalah proses ...",["Mengubah data menjadi bentuk yang sulit dibaca tanpa kunci","Menghapus data selamanya","Mencetak data","Memindahkan monitor"],0],
+["Cloud storage digunakan untuk ...",["Menyimpan data melalui layanan internet","Menyimpan data hanya di RAM","Mendinginkan komputer","Mengukur sinyal"],0],
+["Open source berarti kode sumber ...",["Dapat diakses dan dipelajari sesuai lisensinya","Selalu rahasia","Tidak boleh digunakan","Hanya untuk hardware"],0],
+["Contoh bahasa pemrograman adalah ...",["Python","HTML saja","Wi-Fi","JPEG"],0],
+["Variabel dalam pemrograman digunakan untuk ...",["Menyimpan nilai/data yang dapat digunakan program","Mencetak kertas","Menghubungkan listrik","Mengukur suhu"],0],
+["Perulangan dalam pemrograman digunakan untuk ...",["Menjalankan instruksi berulang","Menghapus komputer","Mengganti monitor","Mencetak sekali"],0],
+["Bug dalam program adalah ...",["Kesalahan yang menyebabkan program tidak berjalan sesuai harapan","Jenis antivirus","Kabel jaringan","Jenis monitor"],0],
+["Debugging adalah proses ...",["Mencari dan memperbaiki kesalahan program","Membuat akun media sosial","Mencetak dokumen","Mengganti baterai"],0],
+["Etika digital berarti ...",["Berperilaku bertanggung jawab dan sopan di ruang digital","Membagikan semua data pribadi","Mengabaikan aturan internet","Menggunakan akun orang lain"],0],
+["Data pribadi sebaiknya ...",["Dijaga dan tidak dibagikan sembarangan","Dipublikasikan kepada semua orang","Diberikan kepada orang asing","Dipakai sebagai password"],0]
+  ]; return makeQuestions(d);
+}
+function makeAgama(){
+  const d=[
+["Rukun Islam yang pertama adalah ...",["Syahadat","Salat","Zakat","Puasa"],0],
+["Rukun Islam berjumlah ...",["3","4","5","6"],2],
+["Rukun Iman berjumlah ...",["4","5","6","7"],2],
+["Kitab suci umat Islam adalah ...",["Al-Qur'an","Injil","Taurat","Weda"],0],
+["Salat wajib dalam sehari semalam berjumlah ...",["3 waktu","4 waktu","5 waktu","6 waktu"],2],
+["Salat Subuh terdiri dari ... rakaat.",["2","3","4","5"],0],
+["Salat Magrib terdiri dari ... rakaat.",["2","3","4","5"],1],
+["Salat Isya terdiri dari ... rakaat.",["2","3","4","5"],2],
+["Puasa wajib bagi umat Islam pada bulan ...",["Muharram","Ramadan","Syawal","Rajab"],1],
+["Zakat fitrah ditunaikan pada bulan ...",["Ramadan","Safar","Rabiul Awal","Dzulhijjah saja"],0],
+["Arah menghadap ketika salat disebut ...",["Kiblat","Mihrab","Mimbar","Saf"],0],
+["Kiblat umat Islam mengarah ke ...",["Ka'bah","Masjid Nabawi","Masjidil Aqsa","Madinah"],0],
+["Wudu dilakukan antara lain sebelum ...",["Salat","Tidur saja","Makan saja","Belajar saja"],0],
+["Tayamum dapat dilakukan ketika ...",["Tidak mendapatkan air atau ada kondisi yang membolehkan","Air tersedia dan tidak ada alasan","Sedang bermain","Setelah makan"],0],
+["Salah satu pembatal wudu adalah ...",["Buang angin","Membaca buku","Berjalan","Tersenyum"],0],
+["Surah pertama dalam Al-Qur'an adalah ...",["Al-Fatihah","Al-Baqarah","An-Nas","Al-Ikhlas"],0],
+["Surah terpanjang dalam Al-Qur'an adalah ...",["Al-Fatihah","Al-Baqarah","Yasin","Al-Ikhlas"],1],
+["Malaikat yang menyampaikan wahyu adalah ...",["Jibril","Mikail","Israfil","Izrail"],0],
+["Malaikat yang bertugas meniup sangkakala adalah ...",["Jibril","Mikail","Israfil","Malik"],2],
+["Malaikat yang bertugas mencabut nyawa adalah ...",["Izrail","Jibril","Mikail","Israfil"],0],
+["Beriman kepada malaikat termasuk rukun ...",["Iman","Islam","Ibadah","Muamalah"],0],
+["Nabi dan rasul terakhir adalah ...",["Muhammad SAW","Musa AS","Isa AS","Ibrahim AS"],0],
+["Nabi yang dikenal sebagai bapak para nabi adalah ...",["Ibrahim AS","Nuh AS","Yusuf AS","Sulaiman AS"],0],
+["Nabi yang membuat kapal besar atas perintah Allah adalah ...",["Nuh AS","Musa AS","Yunus AS","Ayub AS"],0],
+["Nabi yang ditelan ikan adalah ...",["Yunus AS","Yusuf AS","Ilyas AS","Dawud AS"],0],
+["Sikap berkata sesuai kenyataan disebut ...",["Jujur","Dengki","Sombong","Riya"],0],
+["Lawan dari sifat jujur adalah ...",["Dusta","Amanah","Sabar","Ikhlas"],0],
+["Amanah berarti ...",["Dapat dipercaya","Mudah marah","Suka berbohong","Sombong"],0],
+["Sabar berarti ...",["Tetap teguh dan menahan diri dalam menghadapi ujian","Mudah menyerah","Membalas kesalahan","Marah"],0],
+["Ikhlas berarti melakukan kebaikan ...",["Karena Allah tanpa mengharap pujian manusia","Agar dipuji","Agar terkenal","Agar mendapat hadiah saja"],0],
+["Berbakti kepada orang tua disebut ...",["Birrul walidain","Silaturahmi","Tawakal","Hijrah"],0],
+["Menghormati guru merupakan contoh ...",["Akhlak terpuji","Akhlak tercela","Dosa besar","Perbuatan sia-sia"],0],
+["Membicarakan keburukan orang lain di belakangnya disebut ...",["Ghibah","Syukur","Sabar","Amanah"],0],
+["Menyebarkan berita tanpa memeriksa kebenarannya sebaiknya ...",["Dihindari","Dilakukan segera","Diperbanyak","Dijadikan candaan"],0],
+["Sedekah merupakan bentuk ...",["Berbagi kebaikan/harta","Mengambil hak orang","Permusuhan","Kesombongan"],0],
+["Hari raya setelah bulan Ramadan adalah ...",["Idulfitri","Iduladha","Tahun Baru","Maulid"],0],
+["Hari raya kurban adalah ...",["Iduladha","Idulfitri","Isra Mikraj","Nuzulul Quran"],0],
+["Ibadah haji dilaksanakan di kota ...",["Makkah","Jakarta","Kairo","Damaskus"],0],
+["Puasa berarti menahan diri dari hal-hal yang membatalkan sejak ...",["Fajar hingga magrib","Magrib hingga subuh","Siang hingga malam saja","Tengah malam hingga pagi"],0],
+["Makan dan minum dengan sengaja pada siang hari saat puasa Ramadan dapat ...",["Membatalkan puasa","Menambah pahala puasa","Tidak berpengaruh","Menjadi wajib"],0],
+["Syukur berarti ...",["Menyadari dan berterima kasih atas nikmat Allah","Mengeluh terus","Membandingkan diri","Menyombongkan nikmat"],0],
+["Tawakal berarti ...",["Berserah diri kepada Allah setelah berusaha","Tidak mau berusaha","Menyerah sebelum mencoba","Mengandalkan manusia sepenuhnya"],0],
+["Silaturahmi berarti ...",["Menjaga hubungan baik dengan keluarga dan sesama","Memutus hubungan","Menghindari semua orang","Bersaing"],0],
+["Masjid adalah tempat utama untuk ...",["Ibadah","Perdagangan bebas","Pertandingan","Pabrik"],0],
+["Azan merupakan seruan untuk ...",["Salat","Makan","Tidur","Bekerja"],0],
+["Iqamah menandakan ...",["Salat berjamaah akan segera dimulai","Waktu berbuka","Selesai salat","Masuk sekolah"],0],
+["Salat berjamaah mengajarkan ...",["Kebersamaan dan kedisiplinan","Kesombongan","Persaingan","Permusuhan"],0],
+["Al-Qur'an diturunkan kepada Nabi Muhammad SAW melalui ...",["Malaikat Jibril","Malaikat Mikail","Malaikat Israfil","Malaikat Malik"],0],
+["Membaca Al-Qur'an sebaiknya dilakukan dengan ...",["Adab dan tartil","Tergesa-gesa","Bercanda","Berisik"],0],
+["Tujuan utama akhlak terpuji adalah membentuk pribadi yang ...",["Baik dan bermanfaat","Sombong","Pemarah","Tidak peduli"],0]
+  ]; return makeQuestions(d);
+}
+
+const bankSoal={"Matematika":[
+["Hasil dari 12 × 8 adalah ...",["86","96","106","116"],1],
+["Hasil dari 144 ÷ 12 adalah ...",["10","12","14","16"],1],
+["Jika x + 7 = 15, maka nilai x adalah ...",["6","7","8","9"],2],
+["Hasil dari 3² + 4² adalah ...",["12","20","25","30"],2],
+["Akar kuadrat dari 169 adalah ...",["11","12","13","14"],2],
+["Hasil dari 2x + 5 = 17 adalah ...",["5","6","7","8"],1],
+["Jika f(x) = 2x + 3, maka f(4) adalah ...",["9","10","11","12"],2],
+["Hasil dari 5 × (8 − 3) adalah ...",["20","25","30","35"],1],
+["Nilai dari 2³ × 2² adalah ...",["16","24","32","64"],2],
+["Hasil dari 75% × 200 adalah ...",["100","125","150","175"],2],
+["Sebuah persegi memiliki sisi 8 cm. Luasnya adalah ...",["32 cm²","48 cm²","64 cm²","72 cm²"],2],
+["Keliling persegi dengan sisi 12 cm adalah ...",["36 cm","48 cm","52 cm","60 cm"],1],
+["Luas segitiga dengan alas 10 cm dan tinggi 8 cm adalah ...",["20 cm²","40 cm²","60 cm²","80 cm²"],1],
+["Luas lingkaran dengan jari-jari 7 cm adalah ... (π = 22/7)",["144 cm²","154 cm²","164 cm²","174 cm²"],1],
+["Keliling lingkaran dengan diameter 14 cm adalah ... (π = 22/7)",["22 cm","44 cm","66 cm","88 cm"],1],
+["Volume kubus dengan panjang rusuk 5 cm adalah ...",["25 cm³","75 cm³","100 cm³","125 cm³"],3],
+["Volume balok berukuran 10 × 5 × 4 cm adalah ...",["100 cm³","150 cm³","200 cm³","250 cm³"],2],
+["Sebuah persegi panjang memiliki panjang 15 cm dan lebar 6 cm. Luasnya adalah ...",["60 cm²","75 cm²","90 cm²","120 cm²"],2],
+["Jika diameter lingkaran 20 cm, maka jari-jarinya adalah ...",["5 cm","10 cm","15 cm","20 cm"],1],
+["Sisi miring segitiga siku-siku dengan sisi 6 cm dan 8 cm adalah ...",["9 cm","10 cm","12 cm","14 cm"],1],
+["Rata-rata dari 6, 8, 10, 12, dan 14 adalah ...",["8","9","10","11"],2],
+["Median dari data 3, 7, 5, 9, 11 adalah ...",["5","7","9","11"],1],
+["Modus dari data 2, 3, 3, 4, 5, 3, 6 adalah ...",["2","3","4","5"],1],
+["Peluang muncul angka genap saat melempar sebuah dadu adalah ...",["1/6","1/3","1/2","2/3"],2],
+["Sebuah koin dilempar sekali. Peluang muncul gambar adalah ...",["0","1/4","1/2","1"],2],
+["Jika 3x = 27, maka x = ...",["6","7","8","9"],3],
+["Jika 5x − 10 = 20, maka x = ...",["4","5","6","7"],2],
+["Nilai x dari x/4 = 6 adalah ...",["12","18","24","30"],2],
+["Jika 2x + 3 = x + 10, nilai x adalah ...",["5","6","7","8"],2],
+["Hasil dari (x + 3)(x + 2) adalah ...",["x² + 5x + 6","x² + 6x + 5","x² + 4x + 6","x² + 5x + 5"],0],
+["Hasil dari 2x² jika x = 3 adalah ...",["6","12","18","24"],2],
+["Faktorisasi dari x² + 5x + 6 adalah ...",["(x + 1)(x + 6)","(x + 2)(x + 3)","(x − 2)(x − 3)","(x + 3)(x − 2)"],1],
+["Jika x² = 49, nilai positif x adalah ...",["5","6","7","8"],2],
+["Hasil dari √81 + √16 adalah ...",["11","12","13","14"],1],
+["Hasil dari 3/4 + 1/4 adalah ...",["1/2","3/4","1","5/4"],2],
+["Hasil dari 2/3 × 9 adalah ...",["4","6","8","9"],1],
+["Hasil dari 5/6 − 1/3 adalah ...",["1/6","1/3","1/2","2/3"],2],
+["Jika harga sebuah barang Rp80.000 mendapat diskon 25%, harga setelah diskon adalah ...",["Rp55.000","Rp60.000","Rp65.000","Rp70.000"],1],
+["Sebuah barang seharga Rp200.000 naik 10%. Harga barunya adalah ...",["Rp210.000","Rp220.000","Rp230.000","Rp240.000"],1],
+["Perbandingan 2 : 3 memiliki jumlah 25. Nilai bagian pertama adalah ...",["8","10","12","15"],1],
+["Jika 4 pekerja menyelesaikan pekerjaan dalam 12 hari, dengan kemampuan sama 8 pekerja membutuhkan ...",["4 hari","6 hari","8 hari","10 hari"],1],
+["Jarak 120 km ditempuh dalam 3 jam. Kecepatan rata-ratanya adalah ...",["30 km/jam","40 km/jam","50 km/jam","60 km/jam"],1],
+["Sebuah kendaraan bergerak dengan kecepatan 60 km/jam selama 2,5 jam. Jarak yang ditempuh adalah ...",["120 km","140 km","150 km","180 km"],2],
+["Jika suku pertama barisan aritmetika adalah 5 dan bedanya 3, suku ke-5 adalah ...",["14","17","20","23"],1],
+["Barisan 2, 4, 6, 8, ... memiliki suku ke-10 sebesar ...",["18","20","22","24"],1],
+["Jumlah 5 suku pertama dari 2, 4, 6, 8, 10 adalah ...",["20","25","30","35"],2],
+["Jika log₂ 8 = ...",["2","3","4","8"],1],
+["Nilai dari 10⁰ adalah ...",["0","1","10","100"],1],
+["Hasil dari 5² − 3² adalah ...",["12","14","16","18"],2],
+["Jika sebuah sudut besarnya 90°, sudut tersebut disebut ...",["Lancip","Siku-siku","Tumpul","Lurus"],1]
+].map(x=>({question:x[0],options:x[1],answer:x[2]})),
+"IPA":makeIPA(),"IPS":makeIPS(),"Bahasa Indonesia":makeBI(),"Bahasa Inggris":makeBIng(),"PPKn":makePPKn(),"Informatika":makeInformatika(),"Agama":makeAgama()};
+
+let currentUser="",currentSubject="",questions=[],answers=[],currentQuestion=0,timeLeft=3600,timerInterval;
+
+function login(){
+ const name=document.getElementById("nameInput").value.trim(),pass=document.getElementById("passwordInput").value.trim();
+ if(!name||!pass){alert("Nama dan password harus diisi!");return}
+ currentUser=name;document.getElementById("userName").textContent=name;document.getElementById("welcomeName").textContent=name;
+ document.getElementById("loginPage").classList.add("hidden");document.getElementById("dashboardPage").classList.remove("hidden");
+}
+function startExam(subject){
+ if(!bankSoal[subject]?.length){alert("Soal untuk "+subject+" belum tersedia.");return}
+ currentSubject=subject;questions=[...bankSoal[subject]];answers=new Array(questions.length).fill(null);currentQuestion=0;timeLeft=3600;
+ document.getElementById("dashboardPage").classList.add("hidden");document.getElementById("examPage").classList.remove("hidden");
+ document.getElementById("examSubject").textContent=subject+" • "+questions.length+" soal";createNumbers();showQuestion();startTimer();
+}
+function showQuestion(){
+ const q=questions[currentQuestion];document.getElementById("questionNumber").textContent=`Soal ${currentQuestion+1} dari ${questions.length}`;
+ document.getElementById("questionText").textContent=q.question;const box=document.getElementById("options");box.innerHTML="";
+ q.options.forEach((opt,i)=>{const d=document.createElement("div");d.className="option"+(answers[currentQuestion]===i?" selected":"");d.innerHTML=`<b>${String.fromCharCode(65+i)}.</b> ${opt}`;d.onclick=()=>{answers[currentQuestion]=i;showQuestion()};box.appendChild(d)});
+ document.getElementById("progressBar").style.width=((currentQuestion+1)/questions.length*100)+"%";updateNumbers();
+ document.querySelector(".prev").disabled=currentQuestion===0;const b=document.getElementById("nextBtn");
+ if(currentQuestion===questions.length-1){b.textContent="✓ Selesai";b.className="finish"}else{b.textContent="Berikutnya →";b.className="next"}
+}
+function createNumbers(){const box=document.getElementById("numbers");box.innerHTML="";questions.forEach((_,i)=>{const b=document.createElement("button");b.className="num";b.textContent=i+1;b.onclick=()=>{currentQuestion=i;showQuestion()};box.appendChild(b)})}
+function updateNumbers(){document.querySelectorAll(".num").forEach((n,i)=>{n.classList.toggle("answered",answers[i]!==null);n.classList.toggle("current",i===currentQuestion)})}
+function nextQuestion(){if(currentQuestion===questions.length-1){finishExam();return}currentQuestion++;showQuestion()}
+function previousQuestion(){if(currentQuestion>0){currentQuestion--;showQuestion()}}
+function startTimer(){clearInterval(timerInterval);updateTimer();timerInterval=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){clearInterval(timerInterval);alert("Waktu ujian telah habis.");calculateResult()}},1000)}
+function updateTimer(){document.getElementById("timer").textContent=String(Math.floor(timeLeft/60)).padStart(2,"0")+":"+String(timeLeft%60).padStart(2,"0")}
+function finishExam(){const u=answers.filter(a=>a===null).length;if(u&&!confirm(`Masih ada ${u} soal yang belum dijawab.\n\nTetap kumpulkan ujian?`))return;calculateResult()}
+function calculateResult(){clearInterval(timerInterval);let correct=0;questions.forEach((q,i)=>{if(answers[i]===q.answer)correct++});const score=Math.round(correct/questions.length*100);
+ document.getElementById("examPage").classList.add("hidden");document.getElementById("resultPage").classList.remove("hidden");
+ document.getElementById("score").textContent=score;document.getElementById("resultName").textContent=currentUser;document.getElementById("resultSubject").textContent=currentSubject;document.getElementById("correctCount").textContent=correct;document.getElementById("totalCount").textContent=questions.length}
+function backToDashboard(){document.getElementById("resultPage").classList.add("hidden");document.getElementById("dashboardPage").classList.remove("hidden");currentSubject="";questions=[];answers=[];currentQuestion=0}
+</script>
+</body>
+</html>
