@@ -37,7 +37,202 @@ header{background:#fff;box-shadow:0 2px 15px #0001;padding:18px 0;position:stick
 .num{border:0;padding:10px;border-radius:9px;background:#e2e8f0;cursor:pointer}.num.answered{background:#22c55e;color:#fff}.num.current{outline:3px solid #6366f1}
 .result{min-height:100vh;display:flex;justify-content:center;align-items:center}.result-box{background:#fff;width:500px;max-width:94%;padding:40px;border-radius:25px;text-align:center;box-shadow:0 15px 50px #0002}
 .score{font-size:65px;font-weight:800;color:#4f46e5;margin:20px}.info{color:#64748b;line-height:1.8}
+
+.settings-btn{border:0;background:#eef2ff;color:#4f46e5;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:bold}.music-fab{position:fixed;right:22px;bottom:22px;z-index:45;border:0;border-radius:50%;width:58px;height:58px;background:#4f46e5;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 10px 25px #0003}.music-panel{position:fixed;right:22px;bottom:90px;width:330px;max-width:calc(100% - 44px);background:#fff;border-radius:20px;padding:18px;box-shadow:0 15px 45px #0003;z-index:45}.music-row{display:flex;gap:8px;align-items:center}.music-btn{border:0;background:#eef2ff;color:#4f46e5;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:bold}.music-title{font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.music-volume{width:100%}.music-file{font-size:12px;margin-top:10px;color:#64748b}.music-panel input[type=url]{width:100%;padding:10px;border:1px solid #dbe1ea;border-radius:10px;margin-top:8px}
+.profile-wrap{display:flex;align-items:center;gap:10px}.avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#e2e8f0;display:block}
+.settings{position:fixed;inset:0;background:#0006;display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}.settings-box{background:#fff;width:430px;max-width:100%;border-radius:24px;padding:28px;box-shadow:0 20px 60px #0003}.settings-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.close{border:0;background:#f1f5f9;border-radius:10px;padding:8px 12px;cursor:pointer}.profile-preview{text-align:center;margin:10px 0 20px}.profile-preview .avatar{width:90px;height:90px;margin:auto}.file-btn{display:inline-block;margin-top:12px;padding:10px 15px;background:#4f46e5;color:#fff;border-radius:10px;cursor:pointer}.class-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.class-btn{border:2px solid #e2e8f0;background:#fff;padding:14px;border-radius:12px;cursor:pointer;font-weight:bold}.class-btn.active{border-color:#4f46e5;background:#eef2ff;color:#4f46e5}
 @media(max-width:600px){.login-box{padding:25px}.question-box{padding:20px}.question{font-size:18px}}
+</style>
+
+<style id="ui-rapi">
+:root{
+  --primary:#4f46e5;
+  --primary2:#7c3aed;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#6b7280;
+  --border:#e7eaf0;
+  --shadow:0 12px 35px rgba(15,23,42,.08);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0!important;
+  background:linear-gradient(135deg,#f7f8ff 0%,#f4f7fb 55%,#eef2ff 100%)!important;
+  color:var(--text)!important;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+}
+button,input,select{font:inherit}
+button{
+  border:0;
+  border-radius:13px;
+  transition:transform .16s ease,box-shadow .16s ease,filter .16s ease;
+}
+button:hover{transform:translateY(-1px);filter:brightness(1.02)}
+button:active{transform:translateY(0)}
+input,select{
+  border:1px solid var(--border)!important;
+  border-radius:12px!important;
+  padding:12px 14px!important;
+  outline:none;
+  background:#fff!important;
+}
+input:focus,select:focus{
+  border-color:#818cf8!important;
+  box-shadow:0 0 0 4px rgba(99,102,241,.11);
+}
+.container,.dashboard,.exam-container,.result-container{
+  width:min(1100px,calc(100% - 32px))!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.card,.login-card,.settings-card,.exam-card,.result-card,.subject-card,.music-player,.modal-content{
+  border:1px solid rgba(226,229,238,.9)!important;
+  border-radius:var(--radius)!important;
+  box-shadow:var(--shadow)!important;
+  background:rgba(255,255,255,.94)!important;
+}
+header,.topbar,.navbar{
+  backdrop-filter:blur(14px);
+}
+h1,h2,h3{letter-spacing:-.02em}
+.subject-grid,.subjects,.menu-grid{
+  gap:16px!important;
+}
+.subject-card,.subject-btn,.menu-card{
+  min-height:125px;
+  cursor:pointer;
+  border-radius:16px!important;
+}
+.subject-card:hover,.menu-card:hover{
+  box-shadow:0 14px 30px rgba(79,70,229,.12)!important;
+  border-color:#c7d2fe!important;
+}
+.progress,.progress-bar{
+  border-radius:999px!important;
+}
+.exam-option,.option{
+  border:1px solid var(--border)!important;
+  border-radius:14px!important;
+  padding:14px 16px!important;
+  background:#fff!important;
+  cursor:pointer;
+  transition:.15s ease;
+}
+.exam-option:hover,.option:hover{
+  border-color:#a5b4fc!important;
+  background:#f8f9ff!important;
+}
+.selected,.exam-option.selected,.option.selected{
+  border-color:var(--primary)!important;
+  background:#eef2ff!important;
+}
+.timer{
+  border-radius:12px!important;
+  padding:10px 14px!important;
+  box-shadow:0 6px 20px rgba(15,23,42,.08);
+}
+#musicPlayer,.music-player{
+  border-radius:16px!important;
+  box-shadow:0 16px 40px rgba(15,23,42,.18)!important;
+}
+#musicPlayer button,.music-player button{
+  border-radius:10px!important;
+}
+@media(max-width:700px){
+  .container,.dashboard,.exam-container,.result-container{
+    width:min(100% - 20px,1100px)!important;
+  }
+  .subject-grid,.subjects,.menu-grid{
+    grid-template-columns:1fr 1fr!important;
+  }
+  h1{font-size:1.65rem}
+  .card,.login-card,.settings-card,.exam-card,.result-card{padding:18px!important}
+}
+@media(max-width:460px){
+  .subject-grid,.subjects,.menu-grid{grid-template-columns:1fr!important}
+}
+</style>
+
+
+<style id="class-ui">
+#classPage{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px 14px;
+}
+#classPage .class-card{
+  width:min(760px,100%);
+  padding:30px;
+  border-radius:24px;
+  background:rgba(255,255,255,.96);
+  border:1px solid #e6e8f0;
+  box-shadow:0 20px 55px rgba(30,41,59,.11);
+}
+#classPage .class-title{
+  text-align:center;
+  margin:0 0 8px;
+  font-size:clamp(1.7rem,4vw,2.35rem);
+}
+#classPage .class-subtitle{
+  text-align:center;
+  color:var(--muted);
+  margin:0 0 26px;
+}
+#classPage .grade-grid,#classPage .class-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+#classPage .grade-btn,#classPage .class-btn{
+  min-height:78px;
+  padding:16px;
+  font-weight:800;
+  color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  box-shadow:0 10px 22px rgba(79,70,229,.2);
+  cursor:pointer;
+}
+#classPage .back-btn{
+  margin-top:16px;
+  width:100%;
+  padding:12px;
+  background:#f3f4f6;
+  color:#374151;
+}
+@media(max-width:560px){
+  #classPage .class-card{padding:22px 16px}
+  #classPage .grade-grid,#classPage .class-grid{grid-template-columns:1fr}
+}
+</style>
+
+
+<style id="v3-css">
+/* ===== UjianKu V3 ===== */
+.v3-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.v3-stat{background:var(--card,#fff);border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 6px 20px rgba(15,23,42,.05)}
+.v3-stat b{font-size:24px;display:block}.v3-stat span{font-size:12px;color:#64748b}
+.v3-tools{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.v3-btn{border:0;border-radius:12px;padding:10px 14px;background:#eef2ff;color:#3730a3;font-weight:700;cursor:pointer}
+.v3-btn.dark{background:#111827;color:#fff}.v3-btn.danger{background:#fee2e2;color:#991b1b}
+.v3-modal{position:fixed;inset:0;background:rgba(15,23,42,.62);z-index:9999;display:flex;align-items:center;justify-content:center;padding:18px}
+.v3-card{width:min(850px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:22px;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.25)}
+.v3-card h2{margin-top:0}.v3-close{float:right;border:0;background:#f1f5f9;border-radius:10px;padding:8px 11px;cursor:pointer}
+.v3-history{display:grid;gap:10px}.v3-row{display:flex;justify-content:space-between;gap:12px;align-items:center;border:1px solid #e5e7eb;padding:12px;border-radius:12px}
+.v3-review{display:grid;gap:14px}.v3-q{padding:16px;border:1px solid #e5e7eb;border-radius:14px}.v3-q.correct{border-left:5px solid #16a34a}.v3-q.wrong{border-left:5px solid #dc2626}
+.v3-answer{margin-top:8px;font-size:14px}.v3-admin-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.exam-extra{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap}
+#timer.timer-warning{color:#b45309}.timer-danger{color:#dc2626!important;animation:v3pulse 1s infinite}
+@keyframes v3pulse{50%{opacity:.45}}
+body.v3-dark{background:#0f172a!important;color:#e5e7eb}
+body.v3-dark .v3-stat,body.v3-dark .v3-card,body.v3-dark .v3-q,body.v3-dark .v3-row{background:#111827;color:#e5e7eb;border-color:#334155}
+body.v3-dark .v3-stat span{color:#94a3b8}
+body.v3-dark header{background:#111827!important}
+@media(max-width:700px){.v3-stats{grid-template-columns:repeat(2,1fr)}.v3-admin-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -49,10 +244,26 @@ header{background:#fff;box-shadow:0 2px 15px #0001;padding:18px 0;position:stick
 <button class="btn" onclick="login()">Masuk ke Ujian</button>
 </div></section>
 
+<section id="classPage" class="hidden" style="min-height:100vh;padding:35px 0;display:flex;align-items:center;justify-content:center"><div class="login-box" style="max-width:700px"><div class="logo">🎓 Pilih Kelas</div><div class="subtitle">Pilih kelasmu terlebih dahulu sebelum memilih mata pelajaran</div><div id="gradeFirstMenu" class="subject-grid" style="grid-template-columns:repeat(3,1fr)"><button type="button" class="subject" onclick="showClassChoicesFirst('X')"><div class="icon">🔵</div><h3>Kelas X</h3><p>Tingkat dasar • Soal mudah</p></button><button type="button" class="subject" onclick="showClassChoicesFirst('XI')"><div class="icon">🟡</div><h3>Kelas XI</h3><p>Tingkat menengah • Soal sedang</p></button><button type="button" class="subject" onclick="showClassChoicesFirst('XII')"><div class="icon">🔴</div><h3>Kelas XII</h3><p>Tingkat lanjut • Soal sulit</p></button></div>
+<div id="classFirstChoices" class="hidden" style="margin-top:20px"><button type="button" class="close" onclick="showGradeChoicesFirst()" style="margin-bottom:12px">← Kembali</button><h3 id="classFirstTitle" style="margin-bottom:12px"></h3><div class="class-grid" id="classFirstGrid"></div></div>
+<p id="classFirstHint" style="text-align:center;color:#64748b;margin-top:20px">Pilih tingkat kelas terlebih dahulu.</p></div></section>
+
 <section id="dashboardPage" class="hidden">
-<header><div class="container nav"><div class="brand">📚 UjianKu</div><div class="user">👤 <span id="userName"></span></div></div></header>
+<header><div class="container nav"><div class="brand">📚 UjianKu</div><div class="profile-wrap"><img id="profileAvatar" class="avatar" alt="Foto profil"><div class="user">👤 <span id="userName"></span><br><small id="userClass"></small></div><button class="settings-btn" onclick="openSettings()">⚙️ Setting</button></div></div></header>
 <main class="container dashboard">
 <div class="hero"><h1>Halo, <span id="welcomeName"></span> 👋</h1><p>Silakan pilih mata pelajaran untuk memulai ujian.</p></div>
+<div class="v3-stats">
+ <div class="v3-stat"><b id="statExam">0</b><span>Ujian selesai</span></div>
+ <div class="v3-stat"><b id="statAvg">0</b><span>Rata-rata nilai</span></div>
+ <div class="v3-stat"><b id="statBest">0</b><span>Nilai tertinggi</span></div>
+ <div class="v3-stat"><b id="statTime">0</b><span>Menit belajar</span></div>
+</div>
+<div class="v3-tools">
+ <button class="v3-btn" onclick="showHistory()">📜 Riwayat Nilai</button>
+ <button class="v3-btn" onclick="showLeaderboard()">🏆 Peringkat Kelas</button>
+ <button class="v3-btn" onclick="toggleDarkMode()">🌙 Mode Gelap</button>
+ <button id="adminBtn" class="v3-btn hidden" onclick="openAdmin()">🛠️ Admin</button>
+</div>
 <div class="subject-grid">
 <button class="subject" onclick="startExam('Matematika')"><div class="icon">📐</div><h3>Matematika</h3><p>50 soal • 60 menit</p></button>
 <button class="subject" onclick="startExam('IPA')"><div class="icon">🔬</div><h3>IPA</h3><p>50 soal • 60 menit</p></button>
@@ -64,10 +275,42 @@ header{background:#fff;box-shadow:0 2px 15px #0001;padding:18px 0;position:stick
 <button class="subject" onclick="startExam('Agama')"><div class="icon">📿</div><h3>Pendidikan Agama</h3><p>50 soal • 60 menit</p></button>
 </div></main></section>
 
+<button id="musicFab" class="music-fab" onclick="toggleMusicPanel()" title="Pemutar musik">🎵</button>
+<div id="musicPanel" class="music-panel hidden">
+ <div class="music-row" style="justify-content:space-between;margin-bottom:12px"><b>🎵 Musik</b><button class="close" onclick="toggleMusicPanel()">✕</button></div>
+ <audio id="musicAudio" preload="metadata"></audio>
+ <div class="music-title" id="musicTitle">Belum ada musik</div>
+ <div class="music-row" style="margin-top:12px">
+  <button id="musicPlay" class="music-btn" onclick="toggleMusic()">▶ Putar</button>
+  <button class="music-btn" onclick="stopMusic()">■ Stop</button>
+  <label class="music-btn">📁 Pilih Musik<input id="musicInput" type="file" accept="audio/*" hidden onchange="loadMusicFile(event)"></label>
+ </div>
+ <div style="margin-top:12px"><small>Volume</small><input id="musicVolume" class="music-volume" type="range" min="0" max="1" step="0.01" value="0.5" oninput="setMusicVolume(this.value)"></div>
+ <label style="display:block;margin-top:10px;font-size:13px"><input id="musicLoop" type="checkbox" onchange="setMusicLoop(this.checked)"> 🔁 Ulangi musik</label>
+ <div class="music-file">Musik dari file perangkat hanya tersedia selama halaman ini masih terbuka.</div>
+</div>
+<section id="settingsPage" class="settings hidden"><div class="settings-box"><div class="settings-head"><h2>⚙️ Pengaturan Profil</h2><button class="close" onclick="closeSettings()">✕</button></div><div class="profile-preview"><img id="settingsAvatar" class="avatar" alt="Foto profil"><label class="file-btn">📷 Ubah Foto<input id="photoInput" type="file" accept="image/*" hidden onchange="changePhoto(event)"></label></div><label><b>Kelas</b></label>
+<div id="gradeMenu" class="class-grid" style="margin-top:10px">
+<button class="class-btn" onclick="showGrade('X')">Kelas X →</button>
+<button class="class-btn" onclick="showGrade('XI')">Kelas XI →</button>
+<button class="class-btn" onclick="showGrade('XII')">Kelas XII →</button>
+</div>
+<div id="classMenu" class="hidden" style="margin-top:10px">
+<button class="close" onclick="showGrades()" style="margin-bottom:12px">← Kembali</button>
+<div class="class-grid" id="classChoices"></div>
+</div></div></section>
+
 <section id="examPage" class="hidden">
 <header><div class="container nav"><div><div class="brand">UjianKu</div><small id="examSubject"></small></div><div class="timer">⏱ <span id="timer">60:00</span></div></div></header>
 <main class="container exam">
 <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+<div class="exam-extra">
+ <span id="saveStatus">💾 Jawaban tersimpan otomatis</span>
+ <div>
+  <button class="v3-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+  <button class="v3-btn" onclick="showReviewBeforeSubmit()">📋 Review</button>
+ </div>
+</div>
 <div class="question-box">
 <div class="question-number" id="questionNumber"></div><div class="question" id="questionText"></div><div class="options" id="options"></div>
 <div class="nav-buttons"><button class="prev" onclick="previousQuestion()">← Sebelumnya</button><button class="next" id="nextBtn" onclick="nextQuestion()">Berikutnya →</button></div>
@@ -76,21 +319,15 @@ header{background:#fff;box-shadow:0 2px 15px #0001;padding:18px 0;position:stick
 
 <section id="resultPage" class="result hidden">
 <div class="result-box"><h1>🎉 Ujian Selesai!</h1><div class="score"><span id="score">0</span></div>
-<div class="info"><div>Peserta: <b id="resultName"></b></div><div>Mata Pelajaran: <b id="resultSubject"></b></div><div>Jawaban benar: <b id="correctCount"></b> / <b id="totalCount"></b></div></div><br>
-<button class="btn" onclick="backToDashboard()">Kembali ke Dashboard</button></div>
+<div class="info"><div>Peserta: <b id="resultName"></b></div><div>Kelas: <b id="resultClass"></b></div><div>Mata Pelajaran: <b id="resultSubject"></b></div><div>Jawaban benar: <b id="correctCount"></b> / <b id="totalCount"></b></div></div><br>
+<button class="btn" onclick="backToDashboard()">Kembali ke Dashboard</button>
+<div class="v3-tools" style="justify-content:center;margin-top:12px">
+ <button class="v3-btn" onclick="showResultReview()">📖 Lihat Pembahasan</button>
+ <button class="v3-btn" onclick="showHistory()">📜 Riwayat</button>
+</div></div>
 </section>
 
 <script>
-let selectedClass = null;
-
-function chooseClass(kelas) {
-  selectedClass = kelas;
-  document.getElementById("classMenu").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
-  const label = document.getElementById("selectedClassLabel");
-  if (label) label.textContent = "Kelas " + kelas;
-}
-
 
 function makeQuestions(data){
   return data.map(x=>({question:x[0],options:x[1],answer:x[2]}));
@@ -524,19 +761,173 @@ const bankSoal={"Matematika":[
 ].map(x=>({question:x[0],options:x[1],answer:x[2]})),
 "IPA":makeIPA(),"IPS":makeIPS(),"Bahasa Indonesia":makeBI(),"Bahasa Inggris":makeBIng(),"PPKn":makePPKn(),"Informatika":makeInformatika(),"Agama":makeAgama()};
 
-let currentUser="",currentSubject="",questions=[],answers=[],currentQuestion=0,timeLeft=3600,timerInterval;
+let currentUser="",isAdmin=false,currentSubject="",selectedClass=localStorage.getItem("ujianKuClass")||"X 1",profilePhoto=localStorage.getItem("ujianKuPhoto")||"",questions=[],answers=[],currentQuestion=0,timeLeft=3600,timerInterval;
 
 function login(){
  const name=document.getElementById("nameInput").value.trim(),pass=document.getElementById("passwordInput").value.trim();
  if(!name||!pass){alert("Nama dan password harus diisi!");return}
- currentUser=name;document.getElementById("userName").textContent=name;document.getElementById("welcomeName").textContent=name;
- document.getElementById("loginPage").classList.add("hidden");document.getElementById("dashboardPage").classList.remove("hidden");
+ if(name.toLowerCase()==="admin" && pass==="admin123"){
+   currentUser="admin"; isAdmin=true;
+   document.getElementById("loginPage").classList.add("hidden");
+   document.getElementById("classPage").classList.add("hidden");
+   document.getElementById("dashboardPage").classList.remove("hidden");
+   document.getElementById("adminBtn").classList.remove("hidden");
+   document.getElementById("userName").textContent="Administrator";
+   document.getElementById("welcomeName").textContent="Administrator";
+   updateProfileUI(); updateV3Stats();
+   return;
+ }
+ if(name.toLowerCase()==="jokowi" && pass==="ijazah"){currentUser="jokowi";}else{currentUser=name;}
+ isAdmin=false;
+ document.getElementById("adminBtn").classList.add("hidden");
+ document.getElementById("userName").textContent=currentUser;document.getElementById("welcomeName").textContent=currentUser;updateProfileUI();
+ document.getElementById("loginPage").classList.add("hidden");document.getElementById("classPage").classList.remove("hidden");
 }
+function showClassChoicesFirst(grade){
+  document.getElementById("gradeFirstMenu").classList.add("hidden");
+  document.getElementById("classFirstChoices").classList.remove("hidden");
+  document.getElementById("classFirstHint").textContent="Sekarang pilih kelas "+grade+".";
+  document.getElementById("classFirstTitle").textContent="Pilih Kelas "+grade;
+  document.getElementById("classFirstGrid").innerHTML=["1","2","3"].map(n=>`<button type="button" class="class-btn" onclick="selectClassFirst('${grade} ${n}')">${grade} ${n}</button>`).join("");
+}
+function showGradeChoicesFirst(){
+  document.getElementById("classFirstChoices").classList.add("hidden");
+  document.getElementById("gradeFirstMenu").classList.remove("hidden");
+  document.getElementById("classFirstHint").textContent="Pilih tingkat kelas terlebih dahulu.";
+}
+function selectClassFirst(kelas){
+  selectedClass=kelas;
+  localStorage.setItem("ujianKuClass",selectedClass);
+  updateProfileUI();
+  document.getElementById("classPage").classList.add("hidden");
+  document.getElementById("dashboardPage").classList.remove("hidden");
+}
+function gradeOfClass(){
+  if(selectedClass.startsWith("XII")) return "12";
+  if(selectedClass.startsWith("XI")) return "11";
+  return "10";
+}
+function levelLabel(){return gradeOfClass()==="10"?"Materi Kelas 10":gradeOfClass()==="11"?"Materi Kelas 11":"Materi Kelas 12"}
+
+// BANK MATERI PER TINGKAT
+// X = materi kelas 10, XI = materi kelas 11, XII = materi kelas 12.
+// Bank soal lama tetap menjadi cadangan, tetapi setiap tingkat sekarang punya bank sendiri.
+const materiKelas={
+  "10":["dasar dan pengenalan konsep","operasi dan konsep inti"],
+  "11":["pengembangan konsep","analisis dan penerapan"],
+  "12":["pendalaman konsep","analisis lanjutan dan persiapan kelulusan"]
+};
+
+function gradeOfClass(){
+  if(selectedClass.startsWith("XII")) return "12";
+  if(selectedClass.startsWith("XI")) return "11";
+  return "10";
+}
+function levelLabel(){return "Materi Kelas "+gradeOfClass()}
+
+// Pisahkan bank berdasarkan tingkat. Ini sengaja dibuat sebagai struktur terpisah
+// supaya nantinya soal Kelas 10/11/12 tidak pernah tercampur.
+const bankSoalKelas={"10":{},"11":{},"12":{}};
+
+// Kurikulum ringkas per tingkat. Kelas X, XI, XII mempunyai cakupan materi berbeda.
+const kurikulumKelas={
+ "10":{
+  "Matematika":["Eksponen & bentuk akar","Persamaan/pertidaksamaan linear","SPLDV","Fungsi & grafik","Trigonometri dasar","Statistika dasar"],
+  "IPA":["Hakikat sains & pengukuran","Materi & perubahannya","Atom dan sistem periodik","Ekosistem","Keanekaragaman hayati","Energi dan perubahan"],
+  "IPS":["Konsep dasar geografi","Peta & penginderaan jauh","Interaksi sosial","Kebutuhan & kelangkaan","Sejarah awal Indonesia","Keragaman masyarakat"],
+  "Bahasa Indonesia":["Teks laporan hasil observasi","Teks eksposisi","Teks anekdot","Hikayat","Negosiasi","Struktur dan kaidah kebahasaan"],
+  "Bahasa Inggris":["Introducing & describing people","Recount text","Descriptive text","Announcement","Expression of opinion","Simple past & present"],
+  "PPKn":["Pancasila","Konstitusi","Norma","Hak dan kewajiban","Identitas nasional","Bhinneka Tunggal Ika"],
+  "Informatika":["Berpikir komputasional","Algoritma dasar","Sistem komputer","Jaringan dasar","Data & informasi","Keamanan digital"],
+  "Agama":["Al-Qur'an dan hadis dasar","Akidah","Akhlak","Ibadah","Sejarah perkembangan Islam","Toleransi"]
+ },
+ "11":{
+  "Matematika":["Matriks","Program linear","Barisan & deret","Limit fungsi","Turunan dasar","Peluang"],
+  "IPA":["Sistem organ","Genetika","Gelombang","Fluida","Termodinamika","Laju dan kesetimbangan"],
+  "IPS":["Demografi","Pembangunan ekonomi","Perdagangan internasional","Perubahan sosial","Kolonialisme & pergerakan nasional","Geografi sumber daya"],
+  "Bahasa Indonesia":["Proposal","Karya ilmiah","Ceramah","Drama","Resensi","Analisis struktur teks"],
+  "Bahasa Inggris":["Analytical exposition","Explanation text","Procedure kompleks","Cause and effect","Suggestion & opinion","Grammar tingkat menengah"],
+  "PPKn":["Demokrasi","HAM","Sistem hukum","Wawasan nusantara","Integrasi nasional","Politik dan kehidupan bernegara"],
+  "Informatika":["Struktur data dasar","Pemrograman","Basis data","Jaringan komputer","Analisis data","Etika teknologi"],
+  "Agama":["Iman dan takwa","Muamalah","Akhlak sosial","Hukum Islam dasar","Sejarah kebudayaan Islam","Moderasi dan toleransi"]
+ },
+ "12":{
+  "Matematika":["Integral","Aplikasi turunan","Distribusi peluang","Statistika lanjutan","Transformasi","Pemodelan matematika"],
+  "IPA":["Evolusi","Bioteknologi","Listrik dinamis","Fisika modern","Kimia organik","Penerapan sains"],
+  "IPS":["Globalisasi","Ekonomi makro","Kebijakan ekonomi","Geopolitik","Reformasi Indonesia","Pembangunan berkelanjutan"],
+  "Bahasa Indonesia":["Artikel ilmiah","Esai argumentatif","Kritik & esai","Surat lamaran","Novel","Evaluasi informasi"],
+  "Bahasa Inggris":["Application letter","News item","Discussion text","Job interview","Advanced grammar","Reading comprehension"],
+  "PPKn":["Ketatanegaraan","Perlindungan HAM","Ancaman dan tantangan nasional","Peran Indonesia di dunia","Persatuan","Kewarganegaraan global"],
+  "Informatika":["Pemrograman lanjutan","Algoritma & kompleksitas","Basis data lanjutan","Jaringan & keamanan","Proyek digital","Dampak sosial teknologi"],
+  "Agama":["Etika kehidupan","Fiqih kontemporer","Ekonomi syariah","Peradaban Islam","Akhlak bermasyarakat","Penerapan nilai agama"]
+ }
+};
+
+// Kata kunci digunakan untuk mengelompokkan bank lama secara lebih masuk akal daripada
+// sekadar mengambil soal berdasarkan nomor indeks. Bank yang belum memiliki tag tetap
+// mendapat pembagian fallback agar tidak merusak aplikasi lama.
+const kataKunciTingkat={
+ "10":["dasar","pengertian","konsep","norma","pancasila","observasi","eksposisi","algoritma","pengukuran","ekosistem","statistika","persamaan","fungsi"],
+ "11":["analisis","matriks","program linear","genetika","gelombang","proposal","karya ilmiah","demokrasi","basis data","pemrograman","muamalah","turunan","peluang"],
+ "12":["integral","aplikasi","distribusi","evolusi","bioteknologi","globalisasi","makro","artikel","lamaran","discussion","advanced","ketatanegaraan","kompleksitas","kontemporer"]
+};
+function buildGradeBanks(){
+ Object.keys(bankSoal).forEach(subject=>{
+  const base=(bankSoal[subject]||[]).map((q,i)=>({...q,_sourceIndex:i}));
+  if(!base.length)return;
+  const buckets={"10":[],"11":[],"12":[]};
+  base.forEach(q=>{
+   const text=String(q.question||"").toLowerCase();
+   let best="",bestScore=0;
+   Object.entries(kataKunciTingkat).forEach(([g,keys])=>{
+    const score=keys.reduce((n,k)=>n+(text.includes(k.toLowerCase())?1:0),0);
+    if(score>bestScore){bestScore=score;best=g;}
+   });
+   if(best)buckets[best].push(q);
+  });
+  // Jika bank lama terlalu umum, tetap buat tiga pool independen.
+  if(Object.values(buckets).some(a=>a.length<5)){
+   buckets["10"]=base.filter((_,i)=>i%3===0);
+   buckets["11"]=base.filter((_,i)=>i%3===1);
+   buckets["12"]=base.filter((_,i)=>i%3===2);
+  }
+  ["10","11","12"].forEach(g=>{
+   bankSoalKelas[g][subject]=buckets[g].length?buckets[g]:[...base];
+  });
+ });
+}
+buildGradeBanks();
+function shuffleArray(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function getClassQuestions(subject){
+ const grade=gradeOfClass(),pool=bankSoalKelas[grade]?.[subject]||[];
+ if(!pool.length)return [];
+ const unique=shuffleArray(pool);
+ const out=[];
+ for(let i=0;i<50;i++)out.push({...unique[i%unique.length]});
+ return shuffleArray(out);
+}
+function getTopics(subject){return kurikulumKelas[gradeOfClass()]?.[subject]||[]}
+function updateProfileUI(){const avatar=profilePhoto||"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="100%" height="100%" fill="#e2e8f0"/><text x="50%" y="55%" text-anchor="middle" font-size="55">👤</text></svg>`);document.getElementById("profileAvatar").src=avatar;document.getElementById("settingsAvatar").src=avatar;document.getElementById("userClass").textContent="Kelas "+selectedClass;document.querySelectorAll(".class-btn").forEach(b=>b.classList.toggle("active",b.dataset.class===selectedClass))}
+function openSettings(){document.getElementById("settingsPage").classList.remove("hidden");updateProfileUI()}
+function closeSettings(){document.getElementById("settingsPage").classList.add("hidden")}
+function showGrade(grade){
+document.getElementById("gradeMenu").classList.add("hidden");
+document.getElementById("classMenu").classList.remove("hidden");
+document.getElementById("classChoices").innerHTML=["1","2","3"].map(n=>`<button class="class-btn" data-class="${grade} ${n}" onclick="changeClass('${grade} ${n}')">${n}</button>`).join("");
+updateProfileUI();
+}
+function showGrades(){
+document.getElementById("classMenu").classList.add("hidden");
+document.getElementById("gradeMenu").classList.remove("hidden");
+}
+function changeClass(kelas){selectedClass=kelas;localStorage.setItem("ujianKuClass",kelas);updateProfileUI();showGrades()}
+function changePhoto(e){const file=e.target.files[0];if(!file)return;if(!file.type.startsWith("image/"))return alert("Pilih file gambar.");const r=new FileReader();r.onload=()=>{profilePhoto=r.result;localStorage.setItem("ujianKuPhoto",profilePhoto);updateProfileUI()};r.readAsDataURL(file)}
 function startExam(subject){
  if(!bankSoal[subject]?.length){alert("Soal untuk "+subject+" belum tersedia.");return}
- currentSubject=subject;questions=[...bankSoal[subject]];answers=new Array(questions.length).fill(null);currentQuestion=0;timeLeft=3600;
+ currentSubject=subject;questions=getClassQuestions(subject);answers=new Array(questions.length).fill(null);currentQuestion=0;timeLeft=3600;
  document.getElementById("dashboardPage").classList.add("hidden");document.getElementById("examPage").classList.remove("hidden");
- document.getElementById("examSubject").textContent=subject+" • "+questions.length+" soal";createNumbers();showQuestion();startTimer();
+ document.getElementById("examSubject").textContent=subject+" • Kelas "+selectedClass+" • "+levelLabel()+" • "+questions.length+" soal";
+ const topicBox=document.getElementById("examSubject"); if(topicBox) topicBox.title="Materi: "+getTopics(subject).join(" • ");createNumbers();showQuestion();startTimer();
 }
 function showQuestion(){
  const q=questions[currentQuestion];document.getElementById("questionNumber").textContent=`Soal ${currentQuestion+1} dari ${questions.length}`;
@@ -555,8 +946,255 @@ function updateTimer(){document.getElementById("timer").textContent=String(Math.
 function finishExam(){const u=answers.filter(a=>a===null).length;if(u&&!confirm(`Masih ada ${u} soal yang belum dijawab.\n\nTetap kumpulkan ujian?`))return;calculateResult()}
 function calculateResult(){clearInterval(timerInterval);let correct=0;questions.forEach((q,i)=>{if(answers[i]===q.answer)correct++});const score=Math.round(correct/questions.length*100);
  document.getElementById("examPage").classList.add("hidden");document.getElementById("resultPage").classList.remove("hidden");
- document.getElementById("score").textContent=score;document.getElementById("resultName").textContent=currentUser;document.getElementById("resultSubject").textContent=currentSubject;document.getElementById("correctCount").textContent=correct;document.getElementById("totalCount").textContent=questions.length}
+ document.getElementById("score").textContent=score;document.getElementById("resultName").textContent=currentUser;document.getElementById("resultClass").textContent=selectedClass;document.getElementById("resultSubject").textContent=currentSubject;document.getElementById("correctCount").textContent=correct;document.getElementById("totalCount").textContent=questions.length}
 function backToDashboard(){document.getElementById("resultPage").classList.add("hidden");document.getElementById("dashboardPage").classList.remove("hidden");currentSubject="";questions=[];answers=[];currentQuestion=0}
+
+// ===== PEMUTAR MUSIK =====
+let musicObjectUrl="";
+function musicEl(){return document.getElementById("musicAudio")}
+function musicBtn(){return document.getElementById("musicPlay")}
+function toggleMusicPanel(){document.getElementById("musicPanel").classList.toggle("hidden")}
+function updateMusicButton(){const a=musicEl();musicBtn().textContent=a && !a.paused ? "⏸ Jeda" : "▶ Putar"}
+function toggleMusic(){
+ const a=musicEl();
+ if(!a || !a.src){alert("Pilih file musik terlebih dahulu.");return}
+ if(a.paused){
+   const promise=a.play();
+   if(promise){promise.then(updateMusicButton).catch(err=>{console.error(err);alert("File musik tidak bisa diputar di browser ini. Coba MP3 atau WAV." )})}
+ }else{a.pause();updateMusicButton()}
+}
+function stopMusic(){
+ const a=musicEl();
+ if(!a)return;
+ a.pause();
+ try{a.currentTime=0}catch(e){}
+ updateMusicButton();
+}
+function loadMusicFile(e){
+ const file=e.target.files && e.target.files[0];
+ if(!file)return;
+ if(!file.type.startsWith("audio/")){alert("Pilih file audio seperti MP3 atau WAV.");e.target.value="";return}
+ if(musicObjectUrl)URL.revokeObjectURL(musicObjectUrl);
+ musicObjectUrl=URL.createObjectURL(file);
+ const a=musicEl();
+ a.pause();
+ a.src=musicObjectUrl;
+ a.load();
+ a.volume=Number(document.getElementById("musicVolume").value);
+ a.loop=document.getElementById("musicLoop").checked;
+ document.getElementById("musicTitle").textContent="🎶 "+file.name;
+ musicBtn().textContent="▶ Putar";
+}
+function setMusicVolume(v){const a=musicEl();if(a)a.volume=Math.max(0,Math.min(1,Number(v)))}
+function setMusicLoop(v){const a=musicEl();if(a)a.loop=!!v}
+document.addEventListener("DOMContentLoaded",()=>{
+ const a=musicEl();
+ if(a){
+   a.addEventListener("play",updateMusicButton);
+   a.addEventListener("pause",updateMusicButton);
+   a.addEventListener("ended",updateMusicButton);
+   a.volume=0.5;
+ }
+});
+</script>
+
+<script id="v3-js">
+/* ===== UjianKu V3 feature layer ===== */
+let v3ExamStartedAt=0, v3LastResult=null;
+const V3H=()=>`ujianKuHistory_${currentUser||"guest"}`;
+function v3History(){try{return JSON.parse(localStorage.getItem(V3H())||"[]")}catch(e){return[]}}
+function v3SaveHistory(item){const h=v3History();h.unshift(item);localStorage.setItem(V3H(),JSON.stringify(h.slice(0,50)));updateV3Stats()}
+function updateV3Stats(){
+ const h=v3History(), vals=h.map(x=>x.score||0);
+ const avg=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
+ const best=vals.length?Math.max(...vals):0;
+ const mins=Math.round(h.reduce((a,b)=>a+(b.minutes||0),0));
+ const e=document.getElementById("statExam"),a=document.getElementById("statAvg"),b=document.getElementById("statBest"),t=document.getElementById("statTime");
+ if(e)e.textContent=h.length;if(a)a.textContent=avg;if(b)b.textContent=best;if(t)t.textContent=mins;
+}
+function v3Modal(title,body,buttons=""){
+ const old=document.getElementById("v3Modal");if(old)old.remove();
+ const d=document.createElement("div");d.id="v3Modal";d.className="v3-modal";
+ d.innerHTML=`<div class="v3-card"><button class="v3-close" onclick="document.getElementById('v3Modal').remove()">✕</button><h2>${title}</h2><div>${body}</div>${buttons?`<div class="v3-tools" style="justify-content:flex-end;margin-top:18px">${buttons}</div>`:""}</div>`;
+ document.body.appendChild(d);return d;
+}
+function showHistory(){
+ const h=v3History();
+ const body=h.length?`<div class="v3-history">${h.map((x,i)=>`<div class="v3-row"><div><b>${x.subject}</b><br><small>Kelas ${x.kelas} • ${x.date} • ${x.correct}/${x.total} benar</small></div><strong>${x.score}</strong></div>`).join("")}</div>`:`<p>Belum ada riwayat ujian.</p>`;
+ v3Modal("📜 Riwayat Nilai",body);
+}
+function showLeaderboard(){
+ const all=[];
+ for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith("ujianKuHistory_")){try{all.push(...JSON.parse(localStorage.getItem(k)||"[]"))}catch(e){}}}
+ const filtered=all.filter(x=>x.kelas===selectedClass).sort((a,b)=>b.score-a.score).slice(0,10);
+ const body=filtered.length?filtered.map((x,i)=>`<div class="v3-row"><span>#${i+1} ${x.name}</span><strong>${x.score}</strong></div>`).join(""):`<p>Belum ada data peringkat untuk kelas ${selectedClass}.</p>`;
+ v3Modal(`🏆 Peringkat Kelas ${selectedClass}`,body);
+}
+function toggleDarkMode(){document.body.classList.toggle("v3-dark");localStorage.setItem("ujianKuDark",document.body.classList.contains("v3-dark"))}
+function toggleFullscreen(){
+ const el=document.documentElement;
+ if(!document.fullscreenElement){el.requestFullscreen?.().catch(()=>alert("Fullscreen tidak tersedia di browser ini."))}
+ else document.exitFullscreen?.();
+}
+function v3Autosave(){
+ if(!currentSubject||!questions.length)return;
+ localStorage.setItem("ujianKuProgress",JSON.stringify({name:currentUser,kelas:selectedClass,subject:currentSubject,questions,answers,currentQuestion,timeLeft,startedAt:v3ExamStartedAt}));
+ const s=document.getElementById("saveStatus");if(s)s.textContent="💾 Tersimpan "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+}
+function v3ClearProgress(){localStorage.removeItem("ujianKuProgress")}
+function showReviewBeforeSubmit(){
+ const unanswered=answers.filter(x=>x===null).length;
+ const body=`<p><b>${answers.length-unanswered}</b> dari <b>${answers.length}</b> soal sudah dijawab.</p>
+ <p>${unanswered?`Masih ada <b>${unanswered}</b> soal yang belum dijawab.`:"Semua soal sudah dijawab. 👍"}</p>
+ <div class="v3-tools"><button class="v3-btn" onclick="document.getElementById('v3Modal').remove()">Kembali</button>
+ <button class="v3-btn dark" onclick="document.getElementById('v3Modal').remove();calculateResult()">✓ Kumpulkan</button></div>`;
+ v3Modal("📋 Review Sebelum Submit",body);
+}
+function showResultReview(){
+ if(!v3LastResult)return;
+ const body=`<div class="v3-review">${v3LastResult.questions.map((q,i)=>{
+ const ok=v3LastResult.answers[i]===q.answer;
+ const user=v3LastResult.answers[i]===null?"Tidak dijawab":q.options[v3LastResult.answers[i]];
+ const correct=q.options[q.answer];
+ return `<div class="v3-q ${ok?"correct":"wrong"}"><b>Soal ${i+1}. ${q.question}</b>
+ <div class="v3-answer">Jawaban kamu: <b>${user}</b></div>
+ <div class="v3-answer">Jawaban benar: <b>${correct}</b> ${ok?"✅":"❌"}</div></div>`}).join("")}</div>`;
+ v3Modal("📖 Pembahasan / Review Jawaban",body);
+}
+function openAdmin(){
+ if(!isAdmin || currentUser!=="admin"){alert("Akses admin ditolak.");return}
+ const body=`<p style="color:#64748b">Panel khusus administrator. Data pada versi ini tersimpan di browser perangkat ini.</p>
+ <div class="v3-admin-grid">
+  <button class="v3-btn" onclick="adminStats()">📊 Statistik Sistem</button>
+  <button class="v3-btn" onclick="adminParticipants()">👥 Data Peserta</button>
+  <button class="v3-btn" onclick="adminResults()">📋 Semua Hasil</button>
+  <button class="v3-btn" onclick="adminQuestionStats()">📝 Bank Soal</button>
+  <button class="v3-btn" onclick="exportAllResults()">📥 Export Semua Hasil</button>
+  <button class="v3-btn" onclick="adminResetAll()">⚠️ Reset Semua Data</button>
+  <button class="v3-btn" onclick="adminLogout()">🚪 Keluar Admin</button>
+ </div>`;
+ v3Modal("🛠️ Admin UjianKu",body);
+}
+function adminParticipants(){
+ if(!isAdmin)return;
+ const users=[];
+ for(let i=0;i<localStorage.length;i++){
+   const k=localStorage.key(i);
+   if(k?.startsWith("ujianKuHistory_")){
+     const name=k.replace("ujianKuHistory_","");
+     try{
+       const h=JSON.parse(localStorage.getItem(k)||"[]");
+       users.push({name,count:h.length,avg:h.length?Math.round(h.reduce((a,x)=>a+Number(x.score||0),0)/h.length):0});
+     }catch(e){}
+   }
+ }
+ users.sort((a,b)=>b.count-a.count);
+ const body=users.length?`<div class="v3-review">${users.map((u,i)=>`<div class="v3-row"><span><b>${i+1}. ${u.name}</b><br><small>${u.count} ujian • rata-rata ${u.avg}</small></span></div>`).join("")}</div>`:"<p>Belum ada data peserta.</p>";
+ v3Modal("👥 Data Peserta",body);
+}
+function adminResults(){
+ if(!isAdmin)return;
+ const rows=[];
+ for(let i=0;i<localStorage.length;i++){
+   const k=localStorage.key(i);
+   if(k?.startsWith("ujianKuHistory_")){
+     try{
+       const h=JSON.parse(localStorage.getItem(k)||"[]");
+       h.forEach(x=>rows.push({...x,name:k.replace("ujianKuHistory_","")}));
+     }catch(e){}
+   }
+ }
+ rows.sort((a,b)=>(b.time||0)-(a.time||0));
+ const body=rows.length?`<div class="v3-review">${rows.slice(0,100).map(x=>`<div class="v3-row"><span><b>${x.name}</b> — ${x.subject||"-"}</span><strong>${x.score??0}</strong></div>`).join("")}</div>`:"<p>Belum ada hasil.</p>";
+ v3Modal("📋 Semua Hasil",body);
+}
+function adminQuestionStats(){
+ const subjects=["Matematika","IPA","IPS","Bahasa Indonesia","Bahasa Inggris","PPKn","Informatika","Agama"];
+ const body=`<div class="v3-review">${subjects.map(x=>{
+   let n=0; try{n=getClassQuestions(x).length}catch(e){}
+   return `<div class="v3-row"><span><b>${x}</b></span><strong>${n} soal</strong></div>`;
+ }).join("")}</div><p style="margin-top:12px;color:#64748b">Jumlah mengikuti bank soal yang tersedia pada file ini.</p>`;
+ v3Modal("📝 Bank Soal",body);
+}
+function exportAllResults(){
+ if(!isAdmin)return;
+ const all=[];
+ for(let i=0;i<localStorage.length;i++){
+   const k=localStorage.key(i);
+   if(k?.startsWith("ujianKuHistory_")){
+     try{JSON.parse(localStorage.getItem(k)||"[]").forEach(x=>all.push({...x,name:k.replace("ujianKuHistory_","")}))}catch(e){}
+   }
+ }
+ const blob=new Blob([JSON.stringify(all,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="UjianKu_Semua_Hasil.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),500);
+}
+function adminResetAll(){
+ if(!isAdmin)return;
+ if(!confirm("PERINGATAN: Hapus seluruh riwayat dan progress peserta di browser ini?"))return;
+ const keys=[];
+ for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k?.startsWith("ujianKuHistory_")||k==="ujianKuProgress")keys.push(k)}
+ keys.forEach(k=>localStorage.removeItem(k));
+ updateV3Stats(); alert("Semua data ujian pada browser ini telah direset.");
+}
+function adminLogout(){
+ isAdmin=false;currentUser="";
+ document.getElementById("v3Modal")?.remove();
+ document.getElementById("adminBtn")?.classList.add("hidden");
+ document.getElementById("dashboardPage")?.classList.add("hidden");
+ document.getElementById("loginPage")?.classList.remove("hidden");
+ document.getElementById("nameInput").value="";document.getElementById("passwordInput").value="";
+}
+function adminStats(){ if(!isAdmin)return;
+ let n=0,sum=0;for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k?.startsWith("ujianKuHistory_")){try{const h=JSON.parse(localStorage.getItem(k)||"[]");n+=h.length;sum+=h.reduce((a,x)=>a+x.score,0)}catch(e){}}}
+ v3Modal("📊 Statistik","<p>Total ujian tersimpan di browser: <b>"+n+"</b></p><p>Rata-rata nilai seluruh data: <b>"+(n?Math.round(sum/n):0)+"</b></p>");
+}
+function clearMyHistory(){if(!isAdmin)return;if(confirm("Hapus seluruh riwayat nilai akun ini?")){localStorage.removeItem(V3H());updateV3Stats();document.getElementById("v3Modal")?.remove();alert("Riwayat dihapus.")}}
+function resetProgress(){if(!isAdmin)return;v3ClearProgress();document.getElementById("v3Modal")?.remove();alert("Progress ujian tersimpan dihapus.")}
+function exportMyResults(){if(!isAdmin)return;
+ const blob=new Blob([JSON.stringify(v3History(),null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="UjianKu_"+(currentUser||"hasil")+".json";a.click();setTimeout(()=>URL.revokeObjectURL(url),500);
+}
+function v3RestoreProgress(){
+ try{
+  const p=JSON.parse(localStorage.getItem("ujianKuProgress")||"null");
+  if(!p||p.name!==currentUser||p.kelas!==selectedClass)return false;
+  if(!p.questions?.length)return false;
+  if(confirm(`Ada ujian ${p.subject} yang belum selesai (${p.answers.filter(x=>x===null).length} soal belum dijawab). Lanjutkan?`)){
+   currentSubject=p.subject;questions=p.questions;answers=p.answers;currentQuestion=p.currentQuestion||0;timeLeft=p.timeLeft||0;v3ExamStartedAt=p.startedAt||Date.now();
+   document.getElementById("dashboardPage").classList.add("hidden");document.getElementById("examPage").classList.remove("hidden");
+   document.getElementById("examSubject").textContent=currentSubject+" • Kelas "+selectedClass+" • "+levelLabel()+" • "+questions.length+" soal";
+   createNumbers();showQuestion();startTimer();return true;
+  }else v3ClearProgress();
+ }catch(e){console.warn(e)}
+ return false;
+}
+/* Wrap existing exam functions without rewriting the original engine. */
+const _v3StartExam=startExam;
+startExam=function(subject){_v3StartExam(subject);v3ExamStartedAt=Date.now();v3Autosave()};
+const _v3ShowQuestion=showQuestion;
+showQuestion=function(){_v3ShowQuestion();v3Autosave()};
+const _v3Next=nextQuestion;
+nextQuestion=function(){_v3Next();v3Autosave()};
+const _v3Prev=previousQuestion;
+previousQuestion=function(){_v3Prev();v3Autosave()};
+const _v3Calc=calculateResult;
+calculateResult=function(){
+ let correct=0;questions.forEach((q,i)=>{if(answers[i]===q.answer)correct++});
+ v3LastResult={questions:JSON.parse(JSON.stringify(questions)),answers:[...answers],correct,total:questions.length,subject:currentSubject,kelas:selectedClass};
+ const minutes=Math.max(1,Math.round((Date.now()-v3ExamStartedAt)/60000));
+ const score=Math.round(correct/questions.length*100);
+ v3SaveHistory({name:currentUser,kelas:selectedClass,subject:currentSubject,score,correct,total:questions.length,minutes,date:new Date().toLocaleString("id-ID")});
+ v3ClearProgress();_v3Calc();updateV3Stats();
+};
+/* Safer finish: the Review button handles confirmation, existing finish still works. */
+document.addEventListener("DOMContentLoaded",()=>{
+ if(localStorage.getItem("ujianKuDark")==="true")document.body.classList.add("v3-dark");
+ updateV3Stats();
+ setTimeout(()=>{if(currentUser&&selectedClass)v3RestoreProgress()},500);
+});
+/* More useful timer warnings. */
+const _v3UpdateTimer=updateTimer;
+updateTimer=function(){_v3UpdateTimer();const t=document.getElementById("timer");if(!t)return;t.classList.remove("timer-warning","timer-danger");if(timeLeft<=300)t.classList.add("timer-danger");else if(timeLeft<=900)t.classList.add("timer-warning")};
 </script>
 </body>
 </html>
